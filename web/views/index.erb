@@ -1,0 +1,51 @@
+<div class="container">
+  <h1>ROGv <small>Forts Watching System</small></h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="span2">Server : <strong><%= ROGv::ServerConfig.server_name %></strong><br/></div>
+    <div class="span6">
+      <p>last update : <strong><%= format_date(@update_time) %></strong></p>
+    </div>
+    <div class="span2">
+      <a href="<%= app_path %>/">Reload</a>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <table class="table-striped table-bordered">
+    <thead>
+      <tr>
+        <th class="span2"><br/></th>
+        <th class="span2">1</th>
+        <th class="span2">2</th>
+        <th class="span2">3</th>
+        <th class="span2">4</th>
+        <th class="span2">5</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ['V', 'C', 'B', 'L', 'N', 'F'].each do |map| %>
+        <tr>
+          <th class="span2"><%=h map %></th>
+          <% (1..5).each do |num| %>
+            <%
+            f = @forts["#{map}#{num}"]
+            if f
+            %>
+              <td class="span2">
+                <p>
+                  <small><%= f.name %></small><br/>
+                  <small><%= f.formal_name %></small><br/>
+                  <strong><%= f.guild_name %></strong>
+                </p>
+              </td>
+            <% else %>
+              <td class="span2">-</td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

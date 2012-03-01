@@ -1,0 +1,28 @@
+development:
+  :server_name: Nounai
+  :auth:
+    :key: hogepiyo
+    :username: hoge
+    :password: piyo
+  :memcache:
+    :server: localhost
+    :port: 11211
+test:
+  :server_name: SakrayJ
+  :auth:
+    :key: hogepiyo
+    :username: hoge
+    :password: piyo
+  :memcache:
+    :server: localhost
+    :port: 11211
+production:
+  :server_name: Thor
+  :app_path: rogvs
+  :auth:
+    :key: hogepiyo
+    :username: hoge
+    :password: piyo
+  :memcache:
+    :server: localhost
+    :port: 11211
