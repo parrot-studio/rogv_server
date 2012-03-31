@@ -1,101 +1,40 @@
 # coding: utf-8
-require 'date'
-require 'yaml'
-require 'singleton'
-
 module ROGv
-  Fort = Struct.new :id, :name, :formal_name, :guild_name
+  class Fort
+    include MongoMapper::EmbeddedDocument
 
-  class FortMapper
-    include Singleton
+    key :fort_id,     String, :required => true
+    key :fort_name,   String, :required => true
+    key :formal_name, String, :required => true
+    key :guild_name,  String, :required => true
+    key :update_time, Time,   :required => true
 
-    CACHE_KEY = '_rogv_forts_data'
-    
-    def update(h)
-      update_forts(h)
-      update_cache
-      replace_temp_file
+    def self.create_from_data(d)
+      f = Fort.new
+      f.fort_id = d['id']
+      f.fort_name = d['name']
+      f.formal_name = d['formal_name']
+      f.guild_name = d['guild_name']
+      f.update_time = Time.parse(d['update_time'])
+      f
     end
 
-    def cache
-      @cache ||= (read_cache || read_temp_file)
-      @cache ||= {:update_date => nil, :forts => {}}
-      @cache
+    def changed?(udata)
+      return false unless udata
+      return false if self.update_time > udata.update_time
+      return false if self.guild_name == udata.guild_name
+      true
     end
 
-    def forts
-      cache[:forts] ||= {}
-      cache[:forts]
+    def uptime_from(t)
+      return unless t
+      (t - self.update_time).to_i
     end
 
-    def update_time
-      cache[:update_date]
-    end
-
-    def update_forts(h)
-      return unless h
-      return if h.empty?
-
-      h.each do |k, d|
-        case k
-        when 'update_time'
-          cache[:update_date] = DateTime.parse(d)
-        else
-          f = forts[k]
-          unless f
-            f = Fort.new
-            f.id = k
-            forts[k] = f
-          end
-          f.name = d['name']
-          f.formal_name = d['formal_name']
-          f.guild_name = d['guild_name']
-        end
-      end
-
-      self
-    end
-    
-    def update_cache
-      manager.cache_open do |mem|
-        mem.set(CACHE_KEY, cache.to_yaml)
-      end
-      self
-    end
-
-    def reset
-      @cache = nil
-      manager.cache_open do |mem|
-        mem.delete(CACHE_KEY)
-      end
-      self
-    end
-
-    private
-
-    def replace_temp_file
-      # TODO
-    end
-
-    def read_cache
-      manager.cache_open do |mem|
-        data = mem.get(CACHE_KEY)
-        data ? YAML.load(data) : nil
-      end
-    end
-
-    def read_temp_file
-      # TODO
-    end
-
-    def manager
-      @manager ||= lambda do
-        mem = MemcacheManager.new
-        mem.add_server(ServerConfig.memcache_server, ServerConfig.memcache_port)
-        mem.expire_time = 4 * 60 * 60
-        mem
-      end.call
-      @manager
+    def hot?(t)
+      ut = uptime_from(t)
+      return false unless ut
+      ut <= ROGv::ServerConfig.attention_minitues * 60 ? true : false
     end
   end
 end

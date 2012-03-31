@@ -1,28 +1,52 @@
 development:
   :server_name: Nounai
+  :attention_minitues: 5
+  :db:
+    :name: rogv
+    :user: hoge
+    :pass: piyo
   :auth:
     :key: hogepiyo
     :username: hoge
     :password: piyo
+    :delete_key: fizzbuzz
+    :sample_mode: false
   :memcache:
     :server: localhost
     :port: 11211
+    :expire: 1
 test:
   :server_name: SakrayJ
+  :attention_minitues: 5
+  :db:
+    :name: rogv
+    :user: hoge
+    :pass: piyo
   :auth:
     :key: hogepiyo
     :username: hoge
     :password: piyo
+    :delete_key: fizzbuzz
+    :sample_mode: false
   :memcache:
     :server: localhost
     :port: 11211
+    :expire: 1
 production:
   :server_name: Thor
-  :app_path: rogvs
+  :app_path: /rogvs
+  :attention_minitues: 5
+  :db:
+    :name: rogv
+    :user: hoge
+    :pass: piyo
   :auth:
     :key: hogepiyo
     :username: hoge
     :password: piyo
+    :delete_key: fizzbuzz
+    :sample_mode: false
   :memcache:
     :server: localhost
     :port: 11211
+    :expire: 240

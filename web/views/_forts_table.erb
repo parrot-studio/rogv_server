@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="span12">
+    <table class="table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="span2"><br/></th>
+          <th class="span3">1</th>
+          <th class="span3">2</th>
+          <th class="span3">3</th>
+          <th class="span3">4</th>
+          <th class="span3">5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% forts = @situation.forts_map; sup_time = @situation.update_time
+        fort_types.each do |map| %>
+          <tr>
+            <th class="span2"><%=h map %></th>
+            <% fort_nums.each do |num| %>
+              <%
+              f = forts["#{map}#{num}"]
+              if f
+                uptime = f.uptime_from(sup_time) / 60
+                upweek = uptime / 10080
+                add_class = (f.hot?(sup_time) ? ' attention' : '')
+              %>
+                <td class="span3<%= add_class %>">
+                  <p>
+                    <small>
+                      <% if @unlink %>
+                        <%=h f.fort_name %>
+                      <% else %>
+                        <a href="<%= url_for(:fort_timeline, [@situation.gv_date, map, num]) %>"><%=h f.fort_name %></a>
+                      <% end %>
+                    </small><br/>
+                    <small><%=h f.formal_name %></small><br/>
+                    <strong><%=h f.guild_name %></strong>
+                    <% unless @unlink %>
+                      <small><a href="<%= url_for(:guild_timeline, [@situation.gv_date, encode_for_url(f.guild_name)]) %>">★</a></small>
+                    <% end %>
+                    <br/>
+                    <% if upweek > 0 %>
+                      <small>uptime:<span class="uptime-attention"><%= upweek %>week!!</span></small>
+                    <% else %>
+                      <small>uptime:<%= uptime %>min</small>
+                    <% end %>
+                  </p>
+                </td>
+              <% else %>
+                <td class="span3">-</td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+td.attention {
+  color: crimson;
+}
+
+td.guild-owner {
+  background-color: #fcc;
+}
+
+td.guild-stay {
+  background-color: #fee;
+}
+
+td.guild-lose {
+  background-color: #aaa;
+}
+
+li.union {
+  float: left;
+  margin: 0px 5px;
+}
+
+.uptime-attention {
+  color: crimson;
+  text-decoration: underline;
+}
+
+.center {
+  text-align: center;
+}

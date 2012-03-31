@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <li>
+        <a href="<%= url_for(:root) %>">Top</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:date, @date) %>"><%= devided_date(@date) %></a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Guild</strong></li>
+    </ul>
+  </div>
+</div>
+<%
+opts = "<option value=''>-</option>"
+@names.each do |n|
+  opts << "<option>#{n}</option>"
+end
+%>
+<div class="row">
+  <div class="span6">
+    <form action="<%= url_for(:union_select, @date) %>" method="post" class="form-horizontal">
+      <fieldset>
+        <legend>Select Guild or Union (<%= devided_date(@date) %>)</legend>
+        <% (1..8).each do |i| %>
+          <div class="control-group">
+            <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
+            <div class="controls">
+              <select id="guild_<%= i %>" name="guild[]">
+                <%= opts %>
+              </select>
+            </div>
+          </div>
+        <% end %>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">View Timeline</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>

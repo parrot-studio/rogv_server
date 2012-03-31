@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <li>
+        <a href="<%= url_for(:root) %>">Top</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:date, @date) %>"><%= devided_date(@date) %></a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Time List</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Date : <%= devided_date(@date) %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <ul class="nav nav-tabs nav-stacked">
+      <% @revs.each do |r| %>
+        <li><a href="<%= url_for(:rev, [@date, r.revision]) %>"><%= format_time_only(r.update_time) %></a></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

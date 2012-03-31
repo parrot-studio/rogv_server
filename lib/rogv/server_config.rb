@@ -6,21 +6,34 @@ module ROGv
 
     CONFIGS = lambda do
       data = YAML.load(File.read(File.join(APP_ROOT, 'config', 'config.yml')))
-      data[APP_ENV]
+      data[APP_ENV].freeze
     end.call
 
     class << self
 
       def auth_key
+        return unless CONFIGS[:auth]
         CONFIGS[:auth][:key]
       end
 
       def auth_username
+        return unless CONFIGS[:auth]
         CONFIGS[:auth][:username]
       end
 
       def auth_password
+        return unless CONFIGS[:auth]
         CONFIGS[:auth][:password]
+      end
+
+      def auth_delete_key
+        return unless CONFIGS[:auth]
+        CONFIGS[:auth][:delete_key]
+      end
+
+      def auth_sample_mode
+        return unless CONFIGS[:auth]
+        CONFIGS[:auth][:sample_mode]
       end
 
       def app_path
@@ -28,15 +41,42 @@ module ROGv
       end
 
       def memcache_server
+        return unless CONFIGS[:memcache]
         CONFIGS[:memcache][:server]
       end
 
       def memcache_port
+        return unless CONFIGS[:memcache]
         CONFIGS[:memcache][:port]
+      end
+
+      def memcache_expire_minutes
+        return 1 unless CONFIGS[:memcache]
+        t = CONFIGS[:memcache][:expire].to_i
+        t > 0 ? t : 1
       end
 
       def server_name
         CONFIGS[:server_name]
+      end
+
+      def attention_minitues
+        CONFIGS[:attention_minitues].to_i
+      end
+
+      def db_name
+        return unless CONFIGS[:db]
+        CONFIGS[:db][:name]
+      end
+
+      def db_user
+        return unless CONFIGS[:db]
+        CONFIGS[:db][:user]
+      end
+
+      def db_pass
+        return unless CONFIGS[:db]
+        CONFIGS[:db][:pass]
       end
     end
 

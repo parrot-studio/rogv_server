@@ -2,19 +2,30 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% if @reload %>
+      <meta http-equiv="Refresh" content="<%= @reload %>" />
+    <% end %>
     <link href="<%= app_path %>/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= app_path %>/css/main.css" media="screen" rel="stylesheet" type="text/css" />
     <title>ROGv - Forts Watching System</title>
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
   <body>
-    <div id="container">
+    <div class="container">
+      <div class="page-header">
+        <h1>ROGv <small>Forts Watching System (for <%= ROGv::ServerConfig.server_name %>)</small></h1>
+      </div>
       <%= yield %>
     </div>
-    <!--
+    <hr>
+    <footer>
+      <p class="center">"ROGv - Forts Watching System" by @parrot_studio 2012</p>
+      <%= partial_render(:sample_footer) if sample_mode? %>
+    </footer>
     <script src="<%= app_path %>/js/jquery-1.7.1.min.js"></script>
     <script src="<%= app_path %>/js/bootstrap.min.js"></script>
-    -->
   </body>
 </html>
