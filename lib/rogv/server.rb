@@ -228,7 +228,7 @@ module ROGv
 
     get '/d/:date/g/?' do
       date_action do |date|
-        redirect url_for(:date, date)
+        redirect url_for(:union_select, date)
       end
     end
 
