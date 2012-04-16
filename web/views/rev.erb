@@ -49,7 +49,7 @@
       <form action="<%= url_for(:delete, @situation.revision) %>" method="post">
         <input type="hidden" name="_method" value="delete" />
         <div>
-          Confirm with Delete Key:<input type="textbox" name="dkey" value="" />
+          Confirm with Delete Key:<input type="password" name="dkey" value="" />
           <input type="submit" value="Delete" />
         </div>
       </form>
