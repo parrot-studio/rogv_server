@@ -2,6 +2,7 @@
 module ROGv
   class Situation
     include MongoMapper::Document
+    include TimeUtil
 
     key :revision,    String, :required => true
     key :gv_date,     String, :required => true
@@ -55,24 +56,21 @@ module ROGv
         self.for_date(date).map(&:forts).flatten.map(&:guild_name).uniq.sort
       end
 
-      def update_from(data)
-        return if (data.nil? || data.empty?)
-        utime = data.delete('update_time')
-        return unless utime
-        time = Time.parse(utime)
+      def apply(ps)
+        return unless ps
+        return if (ps.forts.nil? || ps.forts.empty?)
 
         ldata = self.latest || self.new
-        return if (ldata.update_time && ldata.update_time > time)
+        return if (ldata.update_time && ldata.update_time > ps.update_time)
         forts = ldata.forts_map
 
         si = self.new
-        si.set_time(time)
+        si.set_time(ps.update_time)
         si.forts = []
 
         update = false
-        data.each do |k, d|
-          udata = Fort.create_from_data(d)
-          f = forts[k]
+        ps.forts.each do |udata|
+          f = forts[udata.fort_id]
           si.forts << if f
             f.changed?(udata) ? udata : f
           else
@@ -84,6 +82,34 @@ module ROGv
         si.save! if update
         si
       end
+
+      def update_from(data)
+        apply(build_from(data))
+      end
+
+      def build_from(data)
+        return if (data.nil? || data.empty?)
+        utime = data.delete('update_time')
+        return unless utime
+        time = Time.parse(utime)
+
+        s = self.new
+        s.set_time(time)
+        s.forts = []
+
+        data.each do |k, d|
+          f = Fort.create_from_data(d)
+          s.forts << f if f
+        end
+
+        s.forts.empty? ? nil : s
+      end
+
+      def cut_in_from(data)
+        s = build_from(data)
+        return unless s
+        s.cut_in!
+      end
     end
 
     def forts_map
@@ -92,23 +118,10 @@ module ROGv
     end
 
     def set_time(t)
+      return unless t
       self.update_time = t
-      set_gv_date(t)
-      set_revision(t)
-    end
-
-    def set_gv_date(t)
-      return unless t
-      d = t.to_datetime
-      self.gv_date = format("%04d%02d%02d", d.year, d.month, d.day)
-    end
-
-    def set_revision(t)
-      return unless t
-      d = t.to_datetime
-      self.revision = format(
-        "%04d%02d%02d%02d%02d%02d",
-        d.year, d.month, d.day, d.hour, d.min, d.sec)
+      self.gv_date = time_to_gvdate(t)
+      self.revision = time_to_revision(t)
     end
 
     def before(diff = 1)
@@ -138,6 +151,7 @@ module ROGv
     end
 
     def connect!(a)
+      return unless a
       afm = a.forts_map
       bfm = self.forts_map
 
@@ -153,6 +167,20 @@ module ROGv
       end
 
       a.save!
+      self
+    end
+
+    def cut_in!
+      return if (self.forts.nil? || self.forts.empty?)
+      return if Situation.find_by_revision(self.revision)
+
+      be = self.class.revision_before(self.revision)
+      af = self.class.revision_after(self.revision)
+      be.connect!(self) if be
+      self.connect!(af) if af
+
+      self.save!
+      self
     end
 
   end

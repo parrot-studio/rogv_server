@@ -28,6 +28,15 @@ http://www.google.co.jp/
 
 https://github.com/parrot-studio/rogv_client
 
+ChangeLog
+---------------
+#### ver1.1
+- 複数の更新クライアントを考慮した処理に変更
+- データ割り込みを追加
+
+#### ver1.0
+- 公開版
+
 License
 ---------------
 The MIT License

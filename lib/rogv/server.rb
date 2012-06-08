@@ -19,6 +19,7 @@ module ROGv
     helpers do
       include Rack::Utils
       alias_method :h, :escape_html
+      include TimeUtil
 
       def app_path
         ServerConfig.app_path
@@ -67,36 +68,6 @@ module ROGv
         end
 
         ret ? ret : "#{app_path}/"
-      end
-
-      def to_jst_datetime(t)
-        return unless t
-        (t.utc? ? t + Time.now.utc_offset : t).to_datetime
-      end
-
-      def format_time(t)
-        return unless t
-        d = to_jst_datetime(t)
-        format("%04d/%02d/%02d %02d:%02d:%02d",
-          d.year, d.month, d.day, d.hour, d.min, d.sec)
-      end
-
-      def format_time_only(t)
-        return unless t
-        d = to_jst_datetime(t)
-        format("%02d:%02d:%02d", d.hour, d.min, d.sec)
-      end
-
-      def devided_date(ds)
-        return unless ds
-        "#{ds[0..3]}/#{ds[4..5]}/#{ds[6..7]}"
-      end
-
-      def time_to_revision(t)
-        return unless t
-        d = to_jst_datetime(t)
-        format("%04d%02d%02d%02d%02d%02d",
-          d.year, d.month, d.day, d.hour, d.min, d.sec)
       end
 
       def partial_render(name)
@@ -272,12 +243,15 @@ module ROGv
     put '/update' do
       protect_action do
         data = JSON.parse(params['d'])
-        Situation.update_from(data)
+        Updater.update_form(data)
+        'OK'
       end
     end
 
     post '/status' do
-      protect_action
+      protect_action do
+        'OK'
+      end
     end
 
     get '/r/:rev' do
@@ -293,6 +267,27 @@ module ROGv
       s = Situation.find_by_revision(params[:rev])
       s.leave! if s
       redirect url_for(:root)
+    end
+
+    get '/latest' do
+      (halt 404) if sample_mode?
+      @situation = Situation.latest || Situation.new
+      @situation.to_json
+    end
+
+    post '/latest' do
+      protect_action do
+        @situation = Situation.latest || Situation.new
+        @situation.to_json
+      end
+    end
+
+    put '/cutin' do
+      protect_action do
+        data = JSON.parse(params['d'])
+        Situation.cut_in_from(data)
+        'OK'
+      end
     end
 
     not_found do
@@ -316,7 +311,6 @@ module ROGv
       (halt 403) if sample_mode?
       (halt 403) unless params['k'] == ServerConfig.auth_key
       yield if block_given?
-      'OK'
     end
 
     def valid_delete_key?(dkey)
