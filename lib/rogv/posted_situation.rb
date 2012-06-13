@@ -42,6 +42,10 @@ module ROGv
       end
     end
 
+    def revision
+      time_to_revision(self.update_time)
+    end
+
     def locked?
       self.locked ? true : false
     end

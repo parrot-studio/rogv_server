@@ -36,6 +36,11 @@ module ROGv
         CONFIGS[:auth][:sample_mode]
       end
 
+      def auth_view_mode
+        return unless CONFIGS[:auth]
+        CONFIGS[:auth][:view_mode]
+      end
+
       def app_path
         CONFIGS[:app_path] || ''
       end

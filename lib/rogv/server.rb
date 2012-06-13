@@ -83,6 +83,11 @@ module ROGv
         ServerConfig.auth_sample_mode ? true : false
       end
 
+      def updatable_mode?
+        return false if sample_mode?
+        ServerConfig.auth_view_mode ? false : true
+      end
+
       def fort_types
         ['V', 'C', 'B', 'L', 'N', 'F']
       end
@@ -262,7 +267,7 @@ module ROGv
 
     delete '/r/:rev' do
       rev_path = url_for(:rev, params[:rev])
-      redirect rev_path if sample_mode?
+      redirect rev_path unless updatable_mode?
       redirect rev_path unless valid_delete_key?(params[:dkey])
       s = Situation.find_by_revision(params[:rev])
       s.leave! if s
@@ -308,7 +313,7 @@ module ROGv
     end
 
     def protect_action
-      (halt 403) if sample_mode?
+      (halt 403) unless updatable_mode?
       (halt 403) unless params['k'] == ServerConfig.auth_key
       yield if block_given?
     end

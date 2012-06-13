@@ -61,7 +61,7 @@ module ROGv
         return if (ps.forts.nil? || ps.forts.empty?)
 
         ldata = self.latest || self.new
-        return if (ldata.update_time && ldata.update_time > ps.update_time)
+        return if (ldata.revision && ldata.revision >= ps.revision)
         forts = ldata.forts_map
 
         si = self.new

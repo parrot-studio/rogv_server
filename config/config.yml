@@ -11,6 +11,7 @@ development:
     :password: piyo
     :delete_key: fizzbuzz
     :sample_mode: false
+    :view_mode: false
   :memcache:
     :server: localhost
     :port: 11211
@@ -28,12 +29,13 @@ test:
     :password: piyo
     :delete_key: fizzbuzz
     :sample_mode: false
+    :view_mode: false
   :memcache:
     :server: localhost
     :port: 11211
     :expire: 1
 production:
-  :server_name: Thor
+  :server_name: Gimle
   :app_path: /rogvs
   :attention_minitues: 5
   :db:
@@ -46,6 +48,7 @@ production:
     :password: piyo
     :delete_key: fizzbuzz
     :sample_mode: false
+    :view_mode: false
   :memcache:
     :server: localhost
     :port: 11211
