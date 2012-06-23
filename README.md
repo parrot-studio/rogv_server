@@ -30,6 +30,10 @@ https://github.com/parrot-studio/rogv_client
 
 ChangeLog
 ---------------
+#### ver1.2
+- dump系の仕組みを追加
+- ディレクトリ構造を変更
+
 #### ver1.1
 - 複数の更新クライアントを考慮した処理に変更
 - データ割り込みを追加
