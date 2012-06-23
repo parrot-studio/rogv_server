@@ -7,7 +7,7 @@ require 'sinatra/base'
 
 module ROGv
   class Server < Sinatra::Base
-    set :root, WEB_ROOT
+    set :root, APP_ROOT
 
     use Rack::MethodOverride
     unless ServerConfig.auth_sample_mode

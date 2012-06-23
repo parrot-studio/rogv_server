@@ -18,7 +18,7 @@ module ROGv
 
     class << self
       def latest
-        self.sort(:created_at.desc).limit(1).first
+        self.sort(:revision.desc).limit(1).first
       end
 
       def date_list
