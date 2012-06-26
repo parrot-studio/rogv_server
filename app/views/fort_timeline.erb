@@ -2,7 +2,7 @@
   <div class="span12">
     <ul class="breadcrumb">
       <li>
-        <a href="<%= url_for(:root) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
       </li>
       <li>
         <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
@@ -17,7 +17,7 @@
         <li class="active"><strong><%= @targets.first[0] %></strong></li>
       <% else %>
         <li>
-          <a href="<%= url_for(:fort_timeline, [@timeline.date, @targets.first[0]]) %>"><%= @targets.first[0] %></a> <span class="divider">&gt;</span>
+          <a href="<%= url_for(:fort_timeline, @timeline.date, @targets.first[0]) %>"><%= @targets.first[0] %></a> <span class="divider">&gt;</span>
         </li>
         <li class="active"><strong><%= @targets.first %></strong></li>
       <% end %>
@@ -48,7 +48,7 @@
         <% @timeline.each_changed_time(@targets, params[:all]) do |ti, li| %>
           <tr>
             <td class="span2 center">
-              <a href="<%= url_for(:rev, [@timeline.date, time_to_revision(ti)]) %>"><%= format_time_only(ti) %></a>
+              <a href="<%= url_for(:rev, @timeline.date, time_to_revision(ti)) %>"><%= format_time_only(ti) %></a>
             </td>
             <% li.each do |g|
               case g
@@ -58,7 +58,7 @@
                 <td class="span3 center"><small>↓</small></td>
               <% else %>
                 <td class="span3 center">
-                  <a href="<%= url_for(:guild_timeline, [@timeline.date, encode_for_url(g)]) %>"><%= g %></a>
+                  <a href="<%= url_for(:guild_timeline, @timeline.date, encode_for_url(g)) %>"><%= g %></a>
                 </td>
               <% end %>
             <% end %>

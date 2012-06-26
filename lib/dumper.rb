@@ -32,7 +32,7 @@ module ROGv
 
     class << self
       def dump_path
-        File.expand_path(File.join(APP_ROOT, 'dump'))
+        File.expand_path(File.join(PADRINO_ROOT, 'dump'))
       end
 
       def execute

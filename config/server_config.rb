@@ -5,8 +5,8 @@ module ROGv
   class ServerConfig
 
     CONFIGS = lambda do
-      data = YAML.load(File.read(File.join(APP_ROOT, 'config', 'config.yml')))
-      data[APP_ENV].freeze
+      data = YAML.load(File.read(File.join(PADRINO_ROOT, 'config', 'config.yml')))
+      data[PADRINO_ENV].freeze
     end.call
 
     class << self

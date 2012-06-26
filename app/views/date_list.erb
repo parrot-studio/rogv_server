@@ -2,7 +2,7 @@
   <div class="span12">
     <ul class="breadcrumb">
       <li>
-        <a href="<%= url_for(:root) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
       </li>
       <% if @date %>
         <li>
@@ -31,9 +31,10 @@
           <tr>
             <td class="span2"><%= devided_date(d) %></td>
             <td class="span1"><a href="<%= url_for(:rev_list, d) %>">Time List</a></td>
-            <% [fort_types, 'SE'].flatten.each do |t| %>
-              <td class="span1"><a href="<%= url_for(:fort_timeline, [d, t]) %>"><%= t %></a></td>
+            <% fort_types.each do |t| %>
+              <td class="span1"><a href="<%= url_for(:fort_timeline, d, t) %>"><%= t %></a></td>
             <% end %>
+            <td class="span1"><a href="<%= url_for(:fort_timeline_se, d) %>">SE</a></td>
             <td class="span2">
               <a href="<%= url_for(:union_select, d) %>">Select Guild</a>
             </td>

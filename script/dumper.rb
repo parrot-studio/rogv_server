@@ -1,4 +1,4 @@
 # coding: utf-8
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'rogv'))
+require File.expand_path("../../config/boot.rb", __FILE__)
 ROGv::Dumper.execute
 exit

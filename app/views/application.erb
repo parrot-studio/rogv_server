@@ -6,8 +6,7 @@
     <% if @reload %>
       <meta http-equiv="Refresh" content="<%= @reload %>" />
     <% end %>
-    <link href="<%= app_path %>/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="<%= app_path %>/css/main.css" media="screen" rel="stylesheet" type="text/css" />
+    <%= stylesheet_link_tag 'bootstrap', 'main' %>
     <title>ROGv - Forts Watching System</title>
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -23,9 +22,8 @@
     <hr>
     <footer>
       <p class="center">"ROGv - Forts Watching System" by @parrot_studio 2012</p>
-      <%= partial_render(:sample_footer) if sample_mode? %>
+      <%= partial(:sample_footer) if sample_mode? %>
     </footer>
-    <script src="<%= app_path %>/js/jquery-1.7.1.min.js"></script>
-    <script src="<%= app_path %>/js/bootstrap.min.js"></script>
+    <%= javascript_include_tag 'jquery', 'bootstrap.min' %>
   </body>
 </html>

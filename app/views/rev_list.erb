@@ -2,7 +2,7 @@
   <div class="span12">
     <ul class="breadcrumb">
       <li>
-        <a href="<%= url_for(:root) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
       </li>
       <li>
         <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
@@ -23,7 +23,7 @@
   <div class="span6">
     <ul class="nav nav-tabs nav-stacked">
       <% @revs.each do |r| %>
-        <li><a href="<%= url_for(:rev, [@date, r.revision]) %>"><%= format_time_only(r.update_time) %></a></li>
+        <li><a href="<%= url_for(:rev, @date, r.revision) %>"><%= format_time_only(r.update_time) %></a></li>
       <% end %>
     </ul>
   </div>

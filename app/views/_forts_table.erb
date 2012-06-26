@@ -30,13 +30,13 @@
                       <% if @unlink %>
                         <%=h f.fort_name %>
                       <% else %>
-                        <a href="<%= url_for(:fort_timeline, [@situation.gv_date, map, num]) %>"><%=h f.fort_name %></a>
+                        <a href="<%= url_for(:fort_timeline_each, @situation.gv_date, map, num) %>"><%=h f.fort_name %></a>
                       <% end %>
                     </small><br/>
                     <small><%=h f.formal_name %></small><br/>
                     <strong><%=h f.guild_name %></strong>
                     <% unless @unlink %>
-                      <small><a href="<%= url_for(:guild_timeline, [@situation.gv_date, encode_for_url(f.guild_name)]) %>">★</a></small>
+                      <small><a href="<%= url_for(:guild_timeline, @situation.gv_date, encode_for_url(f.guild_name)) %>">★</a></small>
                     <% end %>
                     <br/>
                     <% if upweek > 0 %>

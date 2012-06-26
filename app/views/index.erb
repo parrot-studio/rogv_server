@@ -7,14 +7,14 @@
   <div class="span4">
     <div class="btn-toolbar">
       <div class="btn-group">
-        <a class="btn btn-primary" href="<%= @reload ? url_for(:reload, @reload) : url_for(:root) %>">Reload</a>
+        <a class="btn btn-primary" href="<%= @reload ? url_for(:index, :re => @reload) : url_for(:index) %>">Reload</a>
       </div>
       <div class="btn-group">
         <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Auto Reload (now:<%= @reload ? "#{@reload}sec" : 'off' %>) <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="<%= url_for(:root) %>">off</a></li>
+          <li><a href="<%= url_for(:index) %>">off</a></li>
           <% reload_cycle.each do |c| %>
-            <li><a href="<%= url_for(:reload, c) %>"><%= c %>sec</a></li>
+            <li><a href="<%= url_for(:index, :re => c) %>"><%= c %>sec</a></li>
           <% end %>
         </ul>
       </div>
@@ -28,4 +28,4 @@
     </div>
   </div>
 </div>
-<%= partial_render :forts_table %>
+<%= partial :forts_table %>

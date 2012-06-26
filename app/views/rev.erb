@@ -3,7 +3,7 @@
   <div class="span12">
     <ul class="breadcrumb">
       <li>
-        <a href="<%= url_for(:root) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
       </li>
       <li>
         <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
@@ -18,13 +18,13 @@
     </ul>
   </div>
 </div>
-<%= partial_render :forts_table %>
+<%= partial :forts_table %>
 <div class="row">
   <div class="span12 center">
     <div class="btn-toolbar">
       <div class="btn-group">
         <% if before %>
-          <a class="btn btn-primary" href="<%= url_for(:rev, [@situation.gv_date, before.revision]) %>">&laquo; <%= format_time_only(before.update_time) %></a>
+          <a class="btn btn-primary" href="<%= url_for(:rev, @situation.gv_date, before.revision) %>">&laquo; <%= format_time_only(before.update_time) %></a>
         <% else %>
           <button class="btn disabled">&laquo &nbsp;&nbsp;&nbsp;Prev&nbsp;&nbsp;&nbsp;</button>
         <% end %>
@@ -34,7 +34,7 @@
       </div>
       <div class="btn-group">
         <% if after %>
-          <a class="btn btn-primary" href="<%= url_for(:rev, [@situation.gv_date, after.revision]) %>"><%= format_time_only(after.update_time) %> &raquo;</a>
+          <a class="btn btn-primary" href="<%= url_for(:rev, @situation.gv_date, after.revision) %>"><%= format_time_only(after.update_time) %> &raquo;</a>
         <% else %>
           <button class="btn disabled">&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp; &raquo;</button>
         <% end %>

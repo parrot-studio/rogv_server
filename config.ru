@@ -1,3 +1,9 @@
-# coding: utf-8
-require File.expand_path(File.join(File.dirname(__FILE__), 'lib', 'rogv'))
-run ROGv::Server
+#!/usr/bin/env rackup
+# encoding: utf-8
+
+# This file can be used to start Padrino,
+# just execute it from the command line.
+
+require File.expand_path("../config/boot.rb", __FILE__)
+
+run Padrino.application

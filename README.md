@@ -7,8 +7,8 @@ ROのGvGにおいて、「現状」を把握するためのシステム「ROGv�
 以下の技術が使われています。
 
 - Ruby(1.9.2以降で確認)
-- Sinatra
-- memcached（現行バージョンでは利用せず）
+- Padrino（ver1.xはSinatra）
+- memcached
 - MongoDB
 
 Sample Site
@@ -30,6 +30,9 @@ https://github.com/parrot-studio/rogv_client
 
 ChangeLog
 ---------------
+#### ver2.0
+- 基盤をSinatraからPadrinoに変更
+
 #### ver1.2
 - dump系の仕組みを追加
 - ディレクトリ構造を変更
