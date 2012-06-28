@@ -74,5 +74,30 @@ module ROGv
       Base64.urlsafe_decode64(s).force_encoding('UTF-8')
     end
 
+    def cache_enable?
+      return false unless ServerConfig.use_cache?
+      #return false if in_battle_time?
+      return true
+    end
+
+    def get_with_cache(name, expires, &b)
+      return b.call unless cache_enable?
+      cache(name, :expires_in => expires, &b)
+    end
+
+    def revs_for_date(date)
+      return [] unless date
+      get_with_cache("revs_for_#{date}", 30) do
+        Situation.for_date(date).sort(:revision.desc).map(&:revision)
+      end
+    end
+
+    def guild_names_for_date(date)
+      return [] unless date
+      get_with_cache("guild_names_for_#{date}", 30) do
+        Situation.guild_names_for(date)
+      end
+    end
+
   end
 end

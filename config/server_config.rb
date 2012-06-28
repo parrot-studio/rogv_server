@@ -55,10 +55,8 @@ module ROGv
         CONFIGS[:memcache][:port]
       end
 
-      def memcache_expire_minutes
-        return 1 unless CONFIGS[:memcache]
-        t = CONFIGS[:memcache][:expire].to_i
-        t > 0 ? t : 1
+      def use_cache?
+        CONFIGS[:use_cache] ? true : false
       end
 
       def server_name

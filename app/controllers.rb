@@ -26,8 +26,8 @@ module ROGv
 
     get :rev_list, :map => '/d/:date/r/?' do
       date_action do |date|
-        @revs = Situation.for_date(date).sort(:revision.desc)
-        redirect url_for(:date, date) if @revs.none?
+        @revs = revs_for_date(date)
+        redirect url_for(:date, date) if @revs.empty?
         render :rev_list
       end
     end
@@ -88,7 +88,7 @@ module ROGv
 
     get :guild_timeline, :map => '/d/:date/g/:name' do
       date_action do |date|
-        @timeline = GuildTimeline.build_for(date, params[:name])
+        @timeline = GuildTimeline.build_for(date, decode_for_url(params[:name]))
         redirect url_for(:date, date) unless @timeline
         render :guild_timeline
       end
@@ -96,14 +96,14 @@ module ROGv
 
     get :union_select, :map => '/d/:date/u/?' do
       date_action do |date|
-        @names = Situation.guild_names_for(date)
+        @names = guild_names_for_date(date)
         render :union
       end
     end
 
     post :union_select, :map => '/d/:date/u/?' do
       date_action do |date|
-        names = Situation.guild_names_for(date)
+        names = guild_names_for_date(date)
         gs = [params[:guild]].flatten.uniq.compact.reject(&:empty?).select{|n| names.include?(n)}
         redirect url_for(:union_select, date) if gs.empty?
         redirect url_for(:guild_timeline, date, encode_for_url(gs.first)) if gs.size == 1
@@ -113,7 +113,7 @@ module ROGv
 
     get :union_timeline, :map => '/d/:date/u/:names' do
       date_action do |date|
-        names = Situation.guild_names_for(date)
+        names = guild_names_for_date(date)
         gs = params[:names].split(/,/).uniq.compact.reject(&:empty?).map{|s| decode_base64_for_url(s)}.select{|g| names.include?(g)}
         redirect url_for(:union_select, date) if gs.empty?
         redirect url_for(:guild_timeline, date, encode_for_url(gs.first)) if gs.size == 1

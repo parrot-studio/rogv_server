@@ -15,7 +15,7 @@ development:
   :memcache:
     :server: localhost
     :port: 11211
-    :expire: 1
+  :use_cache: true
 test:
   :server_name: SakrayJ
   :attention_minitues: 5
@@ -33,7 +33,7 @@ test:
   :memcache:
     :server: localhost
     :port: 11211
-    :expire: 1
+  :use_cache: false
 production:
   :server_name: Gimle
   :app_path: /rogvs
@@ -52,4 +52,4 @@ production:
   :memcache:
     :server: localhost
     :port: 11211
-    :expire: 240
+  :use_cache: true

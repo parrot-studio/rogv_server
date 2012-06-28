@@ -51,8 +51,18 @@ module ROGv
       URI.encode_www_form_component(s).gsub("+", "%20")
     end
 
-    def render_fort_table(s)
-      partial :forts_table, :object => @situation
+    def decode_for_url(s)
+      URI.decode_www_form_component(s.gsub("%20", "+"))
+    end
+
+    def revision_to_formet_time(rev)
+      return unless rev
+      "#{rev[0..3]}/#{rev[4..5]}/#{rev[6..7]} #{rev[8..9]}:#{rev[10..11]}:#{rev[12..13]}"
+    end
+
+    def revision_to_formet_time_only(rev)
+      return unless rev
+      "#{rev[8..9]}:#{rev[10..11]}:#{rev[12..13]}"
     end
 
   end

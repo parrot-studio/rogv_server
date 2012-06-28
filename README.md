@@ -30,8 +30,14 @@ https://github.com/parrot-studio/rogv_client
 
 ChangeLog
 ---------------
+#### ver2.1
+- 一部でPadrino::Cacheを使うように修正
+- Cacheの使用設定をconfigに追加
+- ギルド単体のTimeline閲覧時、マルチバイトが正しくdecodeされていなかったのを修正
+
 #### ver2.0
 - 基盤をSinatraからPadrinoに変更
+- バグ：ギルド単体のTimelineが閲覧できない（ver2.1で修正）
 
 #### ver1.2
 - dump系の仕組みを追加
