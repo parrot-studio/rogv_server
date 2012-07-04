@@ -42,5 +42,12 @@ module ROGv
       format("%04d%02d%02d", d.year, d.month, d.day)
     end
 
+    def in_battle_time?(t = nil)
+      t ||= DateTime.now
+      return false unless t.sunday?
+      return false unless (19..22).include?(t.hour)
+      true
+    end
+
   end
 end

@@ -30,6 +30,9 @@ https://github.com/parrot-studio/rogv_client
 
 ChangeLog
 ---------------
+#### ver2.2
+- Gv時間とその前後1時間はキャッシュを利用しないように修正
+
 #### ver2.1
 - 一部でPadrino::Cacheを使うように修正
 - Cacheの使用設定をconfigに追加

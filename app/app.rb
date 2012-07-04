@@ -76,8 +76,8 @@ module ROGv
 
     def cache_enable?
       return false unless ServerConfig.use_cache?
-      #return false if in_battle_time?
-      return true
+      return true if sample_mode?
+      TimeUtil.in_battle_time? ? false : true
     end
 
     def get_with_cache(name, expires, &b)
