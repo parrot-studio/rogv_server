@@ -1,0 +1,15 @@
+<% error = flash[:error] %>
+<div class="row">
+  <div class="offset4 span4">
+    <% form_tag(url_for(:a, :login), :class => 'well', :method => 'post') do %>
+      <fieldset class="control-group<%= ' error' if error %>">
+        <label><%= error || 'ログイン情報を入力してください' %></label>
+        <label>user</label>
+        <input type="text" name="user" value="" />
+        <label>pass</label>
+        <input type="password" name="pass" value="" />
+      </fieldset>
+      <button type="submit" class="btn">Login</button> or return to <a href="<%= url_for(:index) %>">ROGv - Top</a>
+    <% end %>
+  </div>
+</div>

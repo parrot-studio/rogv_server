@@ -7,3 +7,5 @@ vendor/gems/*
 .sass-cache/*
 dump/
 
+/.bundle/
+vendor/bundle

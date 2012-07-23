@@ -55,6 +55,10 @@ module ROGv
         CONFIGS[:memcache][:port]
       end
 
+      def memcache_url
+        "#{memcache_server}:#{memcache_port}"
+      end
+
       def use_cache?
         CONFIGS[:use_cache] ? true : false
       end
@@ -80,6 +84,21 @@ module ROGv
       def db_pass
         return unless CONFIGS[:db]
         CONFIGS[:db][:pass]
+      end
+
+      def admin_user
+        return unless CONFIGS[:admin]
+        CONFIGS[:admin][:user]
+      end
+
+      def admin_pass
+        return unless CONFIGS[:admin]
+        CONFIGS[:admin][:pass]
+      end
+
+      def admin_expire_sec
+        return unless CONFIGS[:admin]
+        CONFIGS[:admin][:expire_sec].to_i
       end
     end
 

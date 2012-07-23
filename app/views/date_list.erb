@@ -44,3 +44,10 @@
     </table>
   </div>
 </div>
+<% if updatable_mode? %>
+  <div class="row">
+    <div class="span12">
+      <a href="<%= url_for(:a, :login) %>">管理ツール</a>
+    </div>
+  </div>
+<% end %>

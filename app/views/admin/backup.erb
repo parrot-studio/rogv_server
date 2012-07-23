@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <li>
+        <a href="<%= url_for(:index) %>">ROGv - Top</a> <span class="divider">::</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:a, :index) %>">管理メニュー</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        データバックアップ
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>データバックアップ</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span4">
+    <% if flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+  <div class="span2">
+    <% form_tag(url_for(:a, :backup), :method => 'post') do %>
+      <button type="submit" class="btn-mini btn-info">Start Backup</button>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <table class="table table-striped table-condensed">
+      <tbody>
+        <% @files.sort_by(&:revision).reverse.each do |d| %>
+          <tr>
+            <td class="span4">
+              <a href="<%= url_for(:a, :backup_download, d.revision) %>"><%= revision_to_formet_time(d.revision) %></a>
+            </td>
+            <td class="span2">
+              <% form_tag(url_for(:a, :backup_delete, d.revision), :method => 'delete') do %>
+                <button type="submit" class="btn-mini btn-danger">Delete</button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

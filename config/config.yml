@@ -16,6 +16,10 @@ development:
     :server: localhost
     :port: 11211
   :use_cache: true
+  :admin:
+    :user: amistr
+    :pass: mohumohu
+    :expire_sec: 180
 test:
   :server_name: SakrayJ
   :attention_minitues: 5
@@ -34,6 +38,10 @@ test:
     :server: localhost
     :port: 11211
   :use_cache: false
+  :admin:
+    :user: amistr
+    :pass: mohumohu
+    :expire_sec: 600
 production:
   :server_name: Gimle
   :app_path: /rogvs
@@ -53,3 +61,7 @@ production:
     :server: localhost
     :port: 11211
   :use_cache: true
+  :admin:
+    :user: amistr
+    :pass: mohumohu
+    :expire_sec: 600
