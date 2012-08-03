@@ -48,10 +48,7 @@ module ROGv
 
     get :fort_timeline_se, :map => '/d/:date/f/SE' do
       date_action do |date|
-        @targets = []
-        ['N', 'F'].each do |t|
-          fort_nums.each{|i| @targets << "#{t}#{i}"}
-        end
+        @targets = fort_ids_for_se
         @timeline = FortTimeline.build_for(date)
         redirect url_for(:date, date) unless @timeline
         render :fort_timeline
@@ -61,8 +58,8 @@ module ROGv
     get :fort_timeline, :map => '/d/:date/f/:fort' do
       date_action do |date|
         fort = params[:fort]
-        redirect url_for(:date, date) unless fort_types?(fort)
-        @targets = fort_nums.map{|i| "#{fort}#{i}"}
+        @targets = fort_ids_for(fort)
+        redirect url_for(:date, date) if @targets.empty?
         @timeline = FortTimeline.build_for(date)
         redirect url_for(:date, date) unless @timeline
         render :fort_timeline

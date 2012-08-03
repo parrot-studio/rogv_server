@@ -30,6 +30,10 @@ https://github.com/parrot-studio/rogv_client
 
 ChangeLog
 ---------------
+#### ver2.4
+- 砦Timelineにおいて、最初の時間に対するデータ表示が適切でなかったのを修正
+- その他、ver3系へ向けたコード整理等
+
 #### ver2.3
 - 管理系追加
  - ログインが必須

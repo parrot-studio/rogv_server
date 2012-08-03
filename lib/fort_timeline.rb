@@ -7,7 +7,7 @@ module ROGv
     def self.build_for(date)
       return unless date
       ft = self.new
-      ft.build_for(date)
+      return unless ft.build_for(date)
       ft
     end
 
@@ -44,16 +44,18 @@ module ROGv
       @before_date_fort[fid]
     end
 
+    def result
+      forts_for_time(times.last)
+    end
+
     def result_for(fid)
-      fort(times.last, fid)
+      result[fid]
     end
 
     def stay?(time, fid)
       return false unless (time && fid)
       bt = times.select{|t| t < time}.last
-      return false unless bt
-
-      bf = fort(bt, fid)
+      bf = bt ? fort(bt, fid) : before_date_fort(fid)
       tf = fort(time, fid)
       return false unless (tf && bf)
 
