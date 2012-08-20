@@ -110,6 +110,23 @@ module ROGv
         return unless s
         s.cut_in!
       end
+
+      def repair_duplication!(date)
+        revs = self.for_date(date)
+        return if revs.empty?
+        temp = {}
+        revs.each do |r|
+          t = temp[r.revision]
+          if t
+            stay, del = (t.updated_at > r.updated_at ? [t, r] : [r, t])
+            temp[stay.revision] = stay
+            del.destroy
+          else
+            temp[r.revision] = r
+          end
+        end
+        true
+      end
     end
 
     def forts_map

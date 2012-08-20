@@ -1,16 +1,14 @@
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
       <li>
-        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date_list) %>">Timeline</a> <span class="divider">&gt;</span>
       </li>
       <li>
-        <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date, @timeline.date) %>"><%= devided_date(@timeline.date) %></a> <span class="divider">&gt;</span>
       </li>
-      <li>
-        <a href="<%= url_for(:date, @timeline.date) %>"><%= devided_date(@timeline.date) %></a> <span class="divider">&gt;</span>
-      </li>
-      <li><a href="<%= url_for(:union_select, @timeline.date) %>">Guild</a> <span class="divider">&gt;</span></li>
+      <li><a href="<%= url_for(:t, :union_select, @timeline.date) %>">Guild</a> <span class="divider">&gt;</span></li>
       <li class="active"><strong>
           <% if @timeline.names.size == 1 %>
             <%= @timeline.names.first %>
@@ -36,7 +34,7 @@
       <ul class="unstyled">
         <% name_hash.each do |k, v| %>
           <li class="union">
-            <%= v %> : <a href="<%= url_for(:guild_timeline, @timeline.date, encode_for_url(k)) %>"><%= k %></a>
+            <%= v %> : <a href="<%= url_for(:t, :guild_timeline, @timeline.date, encode_for_url(k)) %>"><%= k %></a>
           </li>
         <% end %>
       </ul>
@@ -49,7 +47,7 @@
           <th class="span2"><%= devided_date(@timeline.date) %></th>
           <% fort_types.each do |ft| %>
             <th colspan="<%= fort_nums.size %>">
-              <a href="<%= url_for(:fort_timeline, @timeline.date, ft) %>"><%= ft %></a>
+              <a href="<%= url_for(:t, :fort_timeline, @timeline.date, ft) %>"><%= ft %></a>
             </th>
           <% end %>
         </tr>
@@ -78,7 +76,7 @@
         <% @timeline.each_changed_time(params[:all]) do |ti, h| %>
           <tr>
             <td class="span2 center">
-              <a href="<%= url_for(:rev, @timeline.date, time_to_revision(ti)) %>"><%= format_time_only(ti) %></a>
+              <a href="<%= url_for(:t, :rev, @timeline.date, time_to_revision(ti)) %>"><%= format_time_only(ti) %></a>
             </td>
             <% each_fort_id do |fid| %>
               <% case h[fid]

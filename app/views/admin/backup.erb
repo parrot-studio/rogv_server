@@ -1,15 +1,11 @@
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
-      <li>
-        <a href="<%= url_for(:index) %>">ROGv - Top</a> <span class="divider">::</span>
-      </li>
+      <%= partial :menu_crumb %>
       <li>
         <a href="<%= url_for(:a, :index) %>">管理メニュー</a> <span class="divider">&gt;</span>
       </li>
-      <li>
-        データバックアップ
-      </li>
+      <li>データバックアップ</li>
     </ul>
   </div>
 </div>

@@ -59,6 +59,11 @@ module ROGv
         "#{memcache_server}:#{memcache_port}"
       end
 
+      def memcache_header
+        return unless CONFIGS[:memcache]
+        CONFIGS[:memcache][:header]
+      end
+
       def use_cache?
         CONFIGS[:use_cache] ? true : false
       end
@@ -99,6 +104,36 @@ module ROGv
       def admin_expire_sec
         return unless CONFIGS[:admin]
         CONFIGS[:admin][:expire_sec].to_i
+      end
+
+      def result_recently_size_default
+        6
+      end
+
+      def result_min_size
+        return 4 unless CONFIGS[:result]
+        val = CONFIGS[:result][:min_size].to_i
+        return 4 if val < 1
+        val
+      end
+
+      def result_max_size
+        return 12 unless CONFIGS[:result]
+        val = CONFIGS[:result][:max_size].to_i
+        return 12 if val < 1
+        val
+      end
+
+      def result_recently_size
+        return result_recently_size_default unless CONFIGS[:result]
+        val = CONFIGS[:result][:recently_size].to_i
+        return result_recently_size_defalut if val < result_min_size || val > result_max_size
+        val
+      end
+
+      def result_store?
+        return false unless CONFIGS[:result]
+        CONFIGS[:result][:store] ? true : false
       end
     end
 

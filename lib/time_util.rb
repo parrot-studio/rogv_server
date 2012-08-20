@@ -42,11 +42,40 @@ module ROGv
       format("%04d%02d%02d", d.year, d.month, d.day)
     end
 
+    def revision_to_formet_time(rev)
+      return unless rev
+      "#{rev[0..3]}/#{rev[4..5]}/#{rev[6..7]} #{rev[8..9]}:#{rev[10..11]}:#{rev[12..13]}"
+    end
+
+    def revision_to_formet_time_only(rev)
+      return unless rev
+      "#{rev[8..9]}:#{rev[10..11]}:#{rev[12..13]}"
+    end
+
     def in_battle_time?(t = nil)
       t ||= DateTime.now
       return false unless t.sunday?
       return false unless (19..22).include?(t.hour)
       true
+    end
+
+    def shift_gvdate(gd, diff)
+      return unless (gd && diff)
+      d = Date.new(gd[0..3].to_i, gd[4..5].to_i, gd[6..7].to_i) + diff
+      format("%04d%02d%02d", d.year, d.month, d.day)
+    end
+
+    def before_gvdate(gd)
+      shift_gvdate(gd, -7)
+    end
+
+    def after_gvdate(gd)
+      shift_gvdate(gd, 7)
+    end
+
+    def valid_gvdate?(d)
+      return false unless d
+      d.match(/\A\d{8}\z/) ? true : false
     end
 
   end

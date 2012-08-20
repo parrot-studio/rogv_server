@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:r, :forts_date_list) %>">Forts Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= devided_date(@result.gv_date) %></strong></li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <table class="table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="span2"><br/></th>
+          <th class="span3">1</th>
+          <th class="span3">2</th>
+          <th class="span3">3</th>
+          <th class="span3">4</th>
+          <th class="span3">5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% forts = @result.forts_map;
+        fort_types.each do |map| %>
+          <tr>
+            <th class="span2"><%=h map %></th>
+            <% fort_nums.each do |num|
+              f = forts["#{map}#{num}"]
+              if f %>
+                <td class="span3">
+                  <p>
+                    <small><%=h f.fort_name %></small><br/>
+                    <small><%=h f.formal_name %></small><br/>
+                    <strong><%=h f.guild_name %></strong>
+                    <small>
+                      <%= link_to('★', url_for(:r, :full_guild, encode_for_url(f.guild_name))) %>
+                    </small>
+                  </p>
+                </td>
+              <% else %>
+                <td class="span3">-</td>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% before = @result.before; after = @result.after %>
+<div class="row">
+  <div class="span12 center">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <% if before %>
+          <a class="btn btn-primary" href="<%= url_for(:r, :forts_result, before.gv_date) %>">&laquo; <%= devided_date(before.gv_date) %></a>
+        <% else %>
+          <button class="btn disabled">&laquo &nbsp;&nbsp;&nbsp;Prev&nbsp;&nbsp;&nbsp;</button>
+        <% end %>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-info" href="<%= url_for(:r, :forts_date_list) %>">Dates</a>
+      </div>
+      <div class="btn-group">
+        <% if after %>
+          <a class="btn btn-primary" href="<%= url_for(:r, :forts_result, after.gv_date) %>"><%= devided_date(after.gv_date) %> &raquo;</a>
+        <% else %>
+          <button class="btn disabled">&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp; &raquo;</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

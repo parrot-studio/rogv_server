@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Full</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Full Result</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <form class="form-inline" action="<%= url_for(:r, :full_redirect) %>" method="post">
+      <div class="span4">
+        <fieldset>
+          <legend>All Guild</legend>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" name="for-all" value="1">View</button>
+          </div>
+        </fieldset>
+      </div>
+      <% opts = "<option value=''>-</option>"
+      @names.sort.each do |n|
+        opts << "<option>#{n}</option>"
+      end %>
+      <div class="span4">
+        <fieldset>
+          <legend>Select Guild or Union</legend>
+          <% (1..8).each do |i| %>
+            <div class="control-group">
+              <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
+              <div class="controls">
+                <select id="guild_<%= i %>" name="guild[]">
+                  <%= opts %>
+                </select>
+              </div>
+            </div>
+          <% end %>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" name="for-guild" value="1">View</button>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+  </div>
+</div>

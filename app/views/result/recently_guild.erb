@@ -1,0 +1,29 @@
+<% num = params[:num] %>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:r, :recently_select) %>">Recently</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <%= num %>weeks <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= @total.name %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>Recently <%= num %>weeks Result : <%= @total.name %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <hr/>
+  </div>
+</div>
+<%= partial :results_guild, :locals => {:target => :full} %>

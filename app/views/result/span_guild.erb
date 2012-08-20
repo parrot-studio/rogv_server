@@ -1,0 +1,33 @@
+<%
+from = params[:from]
+to = params[:to]
+span_label = format_span(from, to)
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:r, :span_select) %>">Span</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <%= span_label %> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= @total.name %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3><%= span_label %> (<%= @dates.size %>weeks) Result : <%= @total.name %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <hr/>
+  </div>
+</div>
+<%= partial :results_guild, :locals => {:target => :span} %>

@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <li>
+        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Strategy Room</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Strategy Room</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><a href="<%= url_for(:t, :date_list) %>">Timeline</a></li>
+      <li><a href="<%= url_for(:r, :menu) %>">Result</a></li>
+      <% if updatable_mode? %>
+        <li><a href="<%= url_for(:a, :login) %>">Admin Tools (need login)</a></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

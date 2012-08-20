@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li class="active"><strong>Result</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Result for Guilds</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><a href="<%= url_for(:r, :full_select) %>">Full</a></li>
+      <li><a href="<%= url_for(:r, :recently_select) %>">Recently</a></li>
+      <li><a href="<%= url_for(:r, :span_select) %>">Span</a></li>
+    </ul>
+    <h3>Result for Forts</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <li><a href="<%= url_for(:r, :forts_date_list) %>">Dates</a></li>
+    </ul>
+  </div>
+</div>

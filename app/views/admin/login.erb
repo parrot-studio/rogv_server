@@ -1,3 +1,11 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>login</li>
+    </ul>
+  </div>
+</div>
 <% error = flash[:error] %>
 <div class="row">
   <div class="offset4 span4">
@@ -9,7 +17,7 @@
         <label>pass</label>
         <input type="password" name="pass" value="" />
       </fieldset>
-      <button type="submit" class="btn">Login</button> or return to <a href="<%= url_for(:index) %>">ROGv - Top</a>
+      <button type="submit" class="btn">Login</button> or return to <a href="<%= url_for(:menu) %>">Strategy Room</a>
     <% end %>
   </div>
 </div>

@@ -1,0 +1,12 @@
+<tr>
+  <th colspan="2" class="span3"><br/></th>
+  <th class="well span1">Total</th>
+  <% ROGv::FortUtil.fort_types_fe.each do |f| %>
+    <th class="span1"><%= f %></th>
+  <% end %>
+  <th class="well span1">FE</th>
+  <% ROGv::FortUtil.fort_types_se.each do |f| %>
+    <th class="span1"><%= f %></th>
+  <% end %>
+  <th class="well span1">SE</th>
+</tr>

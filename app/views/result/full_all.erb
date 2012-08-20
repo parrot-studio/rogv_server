@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:r, :full_select) %>">Full</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>All Guild</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>Full Result : All Guild<%= result_subtitle %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="offset6 span3">
+    priority : <%= link_to('Total', url_for(:r, :full_all), :unless => result_view_for_all?) %>
+    / <%= link_to('SE', url_for(:r, :full_all, :priority => 'se'), :unless => result_view_for_se?) %>
+    / <%= link_to('FE', url_for(:r, :full_all, :priority => 'fe'), :unless => result_view_for_fe?) %>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <hr/>
+  </div>
+</div>
+<%= partial :results_all, :locals => {:target => :full} %>

@@ -2,17 +2,15 @@
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
       <li>
-        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date_list) %>">Timeline</a> <span class="divider">&gt;</span>
       </li>
       <li>
-        <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date, @situation.gv_date) %>"><%= devided_date(@situation.gv_date) %></a> <span class="divider">&gt;</span>
       </li>
       <li>
-        <a href="<%= url_for(:date, @situation.gv_date) %>"><%= devided_date(@situation.gv_date) %></a> <span class="divider">&gt;</span>
-      </li>
-      <li>
-        <a href="<%= url_for(:rev_list, @situation.gv_date) %>">Time List</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :rev_list, @situation.gv_date) %>">Time List</a> <span class="divider">&gt;</span>
       </li>
       <li class="active"><strong><%= format_time_only(@situation.update_time) %></strong></li>
     </ul>
@@ -24,17 +22,17 @@
     <div class="btn-toolbar">
       <div class="btn-group">
         <% if before %>
-          <a class="btn btn-primary" href="<%= url_for(:rev, @situation.gv_date, before.revision) %>">&laquo; <%= format_time_only(before.update_time) %></a>
+          <a class="btn btn-primary" href="<%= url_for(:t, :rev, @situation.gv_date, before.revision) %>">&laquo; <%= format_time_only(before.update_time) %></a>
         <% else %>
           <button class="btn disabled">&laquo &nbsp;&nbsp;&nbsp;Prev&nbsp;&nbsp;&nbsp;</button>
         <% end %>
       </div>
       <div class="btn-group">
-        <a class="btn btn-info" href="<%= url_for(:rev_list, @situation.gv_date) %>"><%= devided_date(@situation.gv_date) %></a>
+        <a class="btn btn-info" href="<%= url_for(:t, :rev_list, @situation.gv_date) %>"><%= devided_date(@situation.gv_date) %></a>
       </div>
       <div class="btn-group">
         <% if after %>
-          <a class="btn btn-primary" href="<%= url_for(:rev, @situation.gv_date, after.revision) %>"><%= format_time_only(after.update_time) %> &raquo;</a>
+          <a class="btn btn-primary" href="<%= url_for(:t, :rev, @situation.gv_date, after.revision) %>"><%= format_time_only(after.update_time) %> &raquo;</a>
         <% else %>
           <button class="btn disabled">&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp; &raquo;</button>
         <% end %>
@@ -46,7 +44,7 @@
   <hr/>
   <div class="row">
     <div class="offset6 span6">
-      <form action="<%= url_for(:delete, @situation.revision) %>" method="post">
+      <form action="<%= url_for(:t, :delete, @situation.gv_date, @situation.revision) %>" method="post">
         <input type="hidden" name="_method" value="delete" />
         <div>
           Confirm with Delete Key:<input type="password" name="dkey" value="" />

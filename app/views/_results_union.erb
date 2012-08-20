@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="span12">
+    <h4>Total</h4>
+    <table class="table table-condensed">
+      <thead>
+        <%= partial :total_header %>
+      </thead>
+      <tbody>
+        <%= partial :total_table, :locals => {:total => @total, :header_type => :total} %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% unless @guilds.empty? %>
+  <div class="row">
+    <div class="span12">
+      <h4>Guilds</h4>
+      <table class="table table-condensed">
+        <thead>
+          <%= partial :total_header %>
+        </thead>
+        <tbody>
+          <% @guilds.sort_by(&:score).reverse.each do |g| %>
+            <%= partial :total_table, :locals => {:total => g, :header_type => :union, :target => target} %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

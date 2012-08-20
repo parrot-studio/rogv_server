@@ -16,6 +16,9 @@ module ROGv
     set :cache, Padrino::Cache::Store::Memcache.new(
       ::Dalli::Client.new(ServerConfig.memcache_url, :exception_retry_limit => 1))
 
+    include DataCache
+    include AdminAuth
+
     ##
     # Application configuration options
     #
@@ -75,58 +78,18 @@ module ROGv
       Base64.urlsafe_decode64(s).force_encoding('UTF-8')
     end
 
-    def cache_enable?
-      return false unless ServerConfig.use_cache?
-      return true if sample_mode?
-      TimeUtil.in_battle_time? ? false : true
+    def parse_guild_params(gname, names)
+      return [] if gname.nil? || gname.empty? || names.empty?
+      [gname].flatten.uniq.compact.reject(&:empty?).select{|n| names.include?(n)}
     end
 
-    def get_with_cache(name, expires, &b)
-      return b.call unless cache_enable?
-      cache(name, :expires_in => expires, &b)
+    def parse_union_code(code, names)
+      return [] if code.nil? || code.empty? || names.empty?
+      code.split(/,/).uniq.compact.reject(&:empty?).map{|s| decode_base64_for_url(s)}.select{|g| names.include?(g)}
     end
 
-    def revs_for_date(date)
-      return [] unless date
-      get_with_cache("revs_for_#{date}", 30) do
-        Situation.for_date(date).sort(:revision.desc).map(&:revision)
-      end
+    def create_union_code(gs)
+      [gs].flatten.uniq.compact.reject(&:empty?).map{|n| encode_base64_for_url(n)}.flatten.join(',')
     end
-
-    def guild_names_for_date(date)
-      return [] unless date
-      get_with_cache("guild_names_for_#{date}", 30) do
-        Situation.guild_names_for(date)
-      end
-    end
-
-    def valid_admin?(user, pass)
-      return false unless ServerConfig.admin_user == user
-      return false unless ServerConfig.admin_pass == pass
-      true
-    end
-
-    def login_for(user)
-      return unless user
-      seed = SecureRandom.hex(12)
-      session[:user] = user
-      session[:seed] = seed
-      session[:hash] = create_hash(user, seed)
-      nil
-    end
-
-    def clear_session
-      session.delete(:user)
-      session.delete(:seed)
-      session.delete(:hash)
-      nil
-    end
-
-    def create_hash(user, seed)
-      return unless (user && seed)
-      s = "#{user}-#{settings.session_secret}-#{seed}"
-      Digest::SHA1.hexdigest(s)
-    end
-
   end
 end

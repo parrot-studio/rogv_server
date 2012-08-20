@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Forts Result</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Forts Result</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <ul class="nav nav-tabs nav-stacked">
+      <% @dates.each do |d| %>
+        <li><a href="<%= url_for(:r, :forts_result, d) %>"><%= devided_date(d) %></a></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

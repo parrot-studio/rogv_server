@@ -18,7 +18,8 @@ module ROGv
 
       ss = Situation.for_date(date).sort_by(&:update_time)
       return if ss.empty?
-      bs = Situation.revision_before(ss.first.revision) || ss.first
+      bs = Situation.revision_before(ss.first.revision)
+      bs = ss.first if (bs.nil? || bs.gv_date != TimeUtil.before_gvdate(date))
 
       @before_date_fort = create_owner_hash(bs)
       @forts = ss.inject({}){|h, s| h[s.update_time] = create_owner_hash(s); h}

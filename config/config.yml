@@ -15,11 +15,17 @@ development:
   :memcache:
     :server: localhost
     :port: 11211
+    :header: devel
   :use_cache: true
   :admin:
     :user: amistr
     :pass: mohumohu
     :expire_sec: 180
+  :result:
+    :recently_size: 6
+    :min_size: 4
+    :max_size: 12
+    :store: false
 test:
   :server_name: SakrayJ
   :attention_minitues: 5
@@ -37,11 +43,17 @@ test:
   :memcache:
     :server: localhost
     :port: 11211
+    :header: test
   :use_cache: false
   :admin:
     :user: amistr
     :pass: mohumohu
     :expire_sec: 600
+  :result:
+    :recently_size: 6
+    :min_size: 4
+    :max_size: 12
+    :store: false
 production:
   :server_name: Gimle
   :app_path: /rogvs
@@ -60,8 +72,14 @@ production:
   :memcache:
     :server: localhost
     :port: 11211
+    :header: hoge
   :use_cache: true
   :admin:
     :user: amistr
     :pass: mohumohu
     :expire_sec: 600
+  :result:
+    :recently_size: 6
+    :min_size: 4
+    :max_size: 12
+    :store: false

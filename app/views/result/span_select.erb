@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Span</strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>Span Result</h3>
+  </div>
+</div>
+<% from_default = @dlist[result_recently_size_default-1] %>
+<div class="row">
+  <div class="span9">
+    <form class="form-inline" action="<%= url_for(:r, :span_redirect) %>" method="post">
+      <div class="span6">
+        <fieldset>
+          <legend>All Guild</legend>
+          <div class="form-actions">
+            <label class="control-label" for="span-from-all">from : </label>
+            <select id="span-from-all" name="span-from-all" class="span2">
+              <% @dlist.each do |d| %>
+                <option value="<%= d %>"<%= ' selected' if d == from_default %>><%= devided_date(d) %></option>
+              <% end %>
+            </select>
+            <label class="control-label" for="span-to-all">to : </label>
+            <select id="span-to-all" name="span-to-all" class="span2">
+              <% @dlist.each do |d| %>
+                <option value="<%= d %>"><%= devided_date(d) %></option>
+              <% end %>
+            </select>
+            <button type="submit" class="btn btn-primary" name="for-all" value="1">View</button>
+            <p><small>min : <%= result_range.min %>weeks / max : <%= result_range.max %>weeks</small></p>
+          </div>
+        </fieldset>
+      </div>
+      <% opts = "<option value=''>-</option>"
+      @names.sort.each do |n|
+        opts << "<option>#{n}</option>"
+      end %>
+      <div class="span6">
+        <fieldset>
+          <legend>Select Guild or Union</legend>
+          <% (1..8).each do |i| %>
+            <div class="control-group">
+              <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
+              <div class="controls">
+                <select id="guild_<%= i %>" name="guild[]">
+                  <%= opts %>
+                </select>
+              </div>
+            </div>
+          <% end %>
+          <div class="form-actions">
+            <label class="control-label" for="span-from-guild">from : </label>
+            <select id="span-from-guild" name="span-from-guild" class="span2">
+              <% @dlist.each do |d| %>
+                <option value="<%= d %>"<%= ' selected' if d == from_default %>><%= devided_date(d) %></option>
+              <% end %>
+            </select>
+            <label class="control-label" for="span-to-guild">to : </label>
+            <select id="span-to-guild" name="span-to-guild" class="span2">
+              <% @dlist.each do |d| %>
+                <option value="<%= d %>"><%= devided_date(d) %></option>
+              <% end %>
+            </select>
+            <button type="submit" class="btn btn-primary" name="for-guild" value="1">View</button>
+            <p><small>min : <%= result_range.min %>weeks / max : <%= result_range.max %>weeks</small></p>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+  </div>
+</div>

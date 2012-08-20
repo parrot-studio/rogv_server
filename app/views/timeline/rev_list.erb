@@ -1,14 +1,12 @@
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
       <li>
-        <a href="<%= url_for(:index) %>">Top</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date_list) %>">Timeline</a> <span class="divider">&gt;</span>
       </li>
       <li>
-        <a href="<%= url_for(:date_list) %>">Strategy Room</a> <span class="divider">&gt;</span>
-      </li>
-      <li>
-        <a href="<%= url_for(:date, @date) %>"><%= devided_date(@date) %></a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date, @date) %>"><%= devided_date(@date) %></a> <span class="divider">&gt;</span>
       </li>
       <li class="active"><strong>Time List</strong></li>
     </ul>
@@ -23,7 +21,7 @@
   <div class="span6">
     <ul class="nav nav-tabs nav-stacked">
       <% @revs.each do |r| %>
-        <li><a href="<%= url_for(:rev, @date, r) %>"><%= revision_to_formet_time_only(r) %></a></li>
+        <li><a href="<%= url_for(:t, :rev, @date, r) %>"><%= revision_to_formet_time_only(r) %></a></li>
       <% end %>
     </ul>
   </div>

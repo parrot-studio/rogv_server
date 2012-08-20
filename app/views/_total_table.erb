@@ -1,0 +1,41 @@
+<tr>
+  <td rowspan="2" class="span2 ">
+    <% case header_type %>
+    <% when :total %>
+      <br/>
+    <% when :guild %>
+      <%= link_to(devided_date(total.gv_date), url_for(:r, :forts_result, total.gv_date)) %>
+    <% when :union %>
+      <% case target %>
+      <% when :full %>
+        <%= link_to(total.name, url_for(:r, :full_guild, encode_for_url(total.name))) %>
+      <% when :recently %>
+        <%= link_to(total.name, url_for(:r, :recently_guild, params[:num], encode_for_url(total.name)))  %>
+      <% when :span %>
+        <%= link_to(total.name, url_for(:r, :span_guild, params[:from], params[:to], encode_for_url(total.name)))  %>
+      <% end %>
+    <% end %>
+  </td>
+  <td class="span1">Called</td>
+  <td class="attention well span1"><%= total.called_count %></td>
+  <% ROGv::FortUtil.fort_types_fe.each do |f| %>
+    <td class="span1"><%= total.called[f].to_i %></td>
+  <% end %>
+  <td class="well span1"><%= total.called_count_fe %></td>
+  <% ROGv::FortUtil.fort_types_se.each do |f| %>
+    <td class="span1"><%= total.called[f].to_i %></td>
+  <% end %>
+  <td class="well span1"><%= total.called_count_se %></td>
+</tr>
+<tr>
+  <td class="span1">Ruled</td>
+  <td class="attention well span1"><%= total.ruled_count %></td>
+  <% ROGv::FortUtil.fort_types_fe.each do |f| %>
+    <td class="span1"><%= total.ruled[f].to_i %></td>
+  <% end %>
+  <td class="well span1"><%= total.ruled_count_fe %></td>
+  <% ROGv::FortUtil.fort_types_se.each do |f| %>
+    <td class="span1"><%= total.ruled[f].to_i %></td>
+  <% end %>
+  <td class="well span1"><%= total.ruled_count_se %></td>
+</tr>

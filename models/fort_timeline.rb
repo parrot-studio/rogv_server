@@ -17,7 +17,8 @@ module ROGv
 
       ss = Situation.for_date(date).sort_by(&:update_time)
       return if ss.empty?
-      bs = Situation.revision_before(ss.first.revision) || ss.first
+      bs = Situation.revision_before(ss.first.revision)
+      bs = ss.first if (bs.nil? || bs.gv_date != TimeUtil.before_gvdate(date))
 
       @before_date_fort = bs.forts_map
       @forts = ss.inject({}){|h, s| h[s.update_time] = s.forts_map; h}

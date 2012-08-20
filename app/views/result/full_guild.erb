@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:r, :menu) %>">Result</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:r, :full_select) %>">Full</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= @total.name %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>Full Result : <%= @total.name %></h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <hr/>
+  </div>
+</div>
+<%= partial :results_guild, :locals => {:target => :full} %>

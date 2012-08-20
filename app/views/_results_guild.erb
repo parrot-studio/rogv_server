@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="span12">
+    <h4>Total</h4>
+    <table class="table table-condensed">
+      <thead>
+        <%= partial :total_header %>
+      </thead>
+      <tbody>
+        <%= partial :total_table, :locals => {:total => @total, :header_type => :total} %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% unless @timelines.empty? %>
+  <div class="row">
+    <div class="span12">
+      <h4>Timeline</h4>
+      <table class="table table-condensed">
+        <thead>
+          <%= partial :total_header %>
+        </thead>
+        <tbody>
+          <% @timelines.sort_by(&:gv_date).reverse.each do |d| %>
+            <%= partial :total_table, :locals => {:total => d, :header_type => :guild, :target => target} %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
