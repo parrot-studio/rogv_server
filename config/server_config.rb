@@ -135,6 +135,28 @@ module ROGv
         return false unless CONFIGS[:result]
         CONFIGS[:result][:store] ? true : false
       end
+
+      def update_host
+        return unless CONFIGS[:update]
+        CONFIGS[:update][:host]
+      end
+
+      def update_port
+        return unless CONFIGS[:update]
+        CONFIGS[:update][:port]
+      end
+
+      def update_path
+        return unless CONFIGS[:update]
+        CONFIGS[:update][:path]
+      end
+
+      def update_target
+        t = "#{update_host}"
+        t << ":#{update_port}" unless update_port.blank?
+        t << "#{update_path}" unless update_path.blank?
+        t
+      end
     end
 
   end

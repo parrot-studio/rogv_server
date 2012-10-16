@@ -26,6 +26,10 @@ development:
     :min_size: 4
     :max_size: 12
     :store: false
+  :update:
+    :host: localhost
+    :port: 3000
+    :path:
 test:
   :server_name: SakrayJ
   :attention_minitues: 5
@@ -54,6 +58,10 @@ test:
     :min_size: 4
     :max_size: 12
     :store: false
+  :update:
+    :host: localhost
+    :port: 3000
+    :path:
 production:
   :server_name: Gimle
   :app_path: /rogvs
@@ -83,3 +91,7 @@ production:
     :min_size: 4
     :max_size: 12
     :store: false
+  :update:
+    :host: localhost
+    :port:
+    :path:

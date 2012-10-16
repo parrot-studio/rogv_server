@@ -10,6 +10,6 @@ PADRINO_ENV = options[:env] if options[:env]
 
 require File.expand_path("../../config/boot.rb", __FILE__)
 
-ROGv::TotalResult.caches.each(&:destroy)
+ROGv::TotalResult.cache_clear!
 
 exit

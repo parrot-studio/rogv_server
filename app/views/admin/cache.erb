@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:a, :index) %>">管理メニュー</a> <span class="divider">&gt;</span>
+      </li>
+      <li>キャッシュ管理</li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>キャッシュ管理</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span4">
+    <% case
+    when flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% when flash[:info] %>
+      <div class="alert alert-success">
+        <p>
+          <%= flash[:info] %>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+  <div class="span2">
+    <% form_tag(url_for(:a, :cache_delete, 'all'), :method => 'delete') do %>
+      <button type="submit" class="btn-mini btn-primary">All Clear</button>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <table class="table table-striped table-condensed">
+      <tbody>
+        <tr>
+          <td class="span4">結果データキャッシュ : <%= ROGv::TotalResult.caches.size %></td>
+          <td class="span2">
+            <% form_tag(url_for(:a, :cache_delete, 'total'), :method => 'delete') do %>
+              <button type="submit" class="btn-mini btn-info">Clear</button>
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

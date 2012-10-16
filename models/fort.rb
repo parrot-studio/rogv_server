@@ -9,14 +9,20 @@ module ROGv
     key :guild_name,  String, :required => true
     key :update_time, Time,   :required => true
 
-    def self.create_from_data(d)
-      f = Fort.new
-      f.fort_id = d['id']
-      f.fort_name = d['name']
-      f.formal_name = d['formal_name']
-      f.guild_name = d['guild_name']
-      f.update_time = Time.parse(d['update_time'])
-      f
+    class << self
+
+      def create_from_data(d)
+        return if d.nil? || d.empty?
+
+        f = Fort.new
+        f.fort_id = d['id']
+        f.fort_name = d['name']
+        f.formal_name = d['formal_name']
+        f.guild_name = d['guild_name']
+        f.update_time = Time.parse(d['update_time'])
+        f
+      end
+
     end
 
     def changed?(udata)

@@ -158,6 +158,7 @@ module ROGv
       redirect url_for(:r, :span_select) unless valid_result_size?(dlist.size)
 
       @total = TotalResult.totalize_for_dates(dlist)
+      @total.save if @total.new_record? && result_store_mode?
       render 'result/span_all'
     end
 

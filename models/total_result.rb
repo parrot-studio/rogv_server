@@ -77,6 +77,10 @@ module ROGv
         self.all.reject{|t| t.label == TOTAL_LABEL_ALL}
       end
 
+      def cache_clear!
+        self.caches.each(&:destroy)
+      end
+
       private
 
       def target_dates_of_recently(span, from = nil)

@@ -10,6 +10,7 @@ gem 'rake'
 gem 'sinatra-flash', :require => 'sinatra/flash'
 gem 'dalli'
 gem 'json'
+gem 'httpclient'
 
 # Component requirements
 gem 'erubis', "~> 2.7.0"

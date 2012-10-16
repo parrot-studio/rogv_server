@@ -62,5 +62,23 @@ module ROGv
       redirect url_for(:a, :backup)
     end
 
+    get :cache do
+      render 'admin/cache'
+    end
+
+    delete :cache_delete, :with => :target do
+      str = case params[:target].to_sym
+      when :all
+        TotalResult.cache_clear!
+        '全て'
+      when :total
+        TotalResult.cache_clear!
+        '結果データ'
+      end
+
+      flash[:info] = "#{str}のキャッシュをクリアしました" if str
+      redirect url_for(:a, :cache)
+    end
+
   end
 end
