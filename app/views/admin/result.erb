@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:a, :index) %>">管理メニュー</a> <span class="divider">&gt;</span>
+      </li>
+      <li>結果集計管理</li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>結果追加</h3>
+    <p>
+      <small>
+        コール回数等、結果データ確認用のデータを生成<br />
+        通常はGv後に「未集計の全データを集計」を実行すればOK<br />
+        集計を自動化したい場合は"script/add_total.rb"をcronで定時実行
+      </small>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <% case
+    when flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% when flash[:info] %>
+      <div class="alert alert-success">
+        <p>
+          <%= flash[:info] %>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="offset3 span3">
+    <% form_tag(url_for(:a, :result_add_total), :method => 'post') do %>
+      <button type="submit" class="btn-mini btn-primary">未集計の全データを集計</button>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <% form_tag(url_for(:a, :result_add_total), :method => 'post') do %>
+    <div class="span3">
+      <select id="add_total_date" name="add_total_date">
+        <% ROGv::Situation.date_list.sort.reverse.each do |d| %>
+          <option value="<%= d %>"><%= devided_date(d) %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="span3">
+      <button type="submit" class="btn-mini btn-info">指定した日のデータを集計</button>
+    </div>
+  <% end %>
+</div>

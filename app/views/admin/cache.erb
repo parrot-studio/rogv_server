@@ -44,9 +44,25 @@
     <table class="table table-striped table-condensed">
       <tbody>
         <tr>
-          <td class="span4">結果データキャッシュ : <%= ROGv::TotalResult.caches.size %></td>
+          <td class="span4">結果データ : <%= ROGv::TotalResult.caches.count %></td>
           <td class="span2">
             <% form_tag(url_for(:a, :cache_delete, 'total'), :method => 'delete') do %>
+              <button type="submit" class="btn-mini btn-info">Clear</button>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td class="span4">砦タイムラインデータ : <%= ROGv::FortTimeline.caches.count %></td>
+          <td class="span2">
+            <% form_tag(url_for(:a, :cache_delete, 'fort_timeline'), :method => 'delete') do %>
+              <button type="submit" class="btn-mini btn-info">Clear</button>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td class="span4">ギルドタイムラインデータ : <%= ROGv::GuildTimeline.caches.count %></td>
+          <td class="span2">
+            <% form_tag(url_for(:a, :cache_delete, 'guild_timeline'), :method => 'delete') do %>
               <button type="submit" class="btn-mini btn-info">Clear</button>
             <% end %>
           </td>

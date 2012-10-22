@@ -21,7 +21,7 @@
   <div class="span6">
     <ul class="nav nav-tabs nav-stacked">
       <% @revs.each do |r| %>
-        <li><a href="<%= url_for(:t, :rev, @date, r) %>"><%= revision_to_formet_time_only(r) %></a></li>
+        <li><a href="<%= url_for(:t, :rev, @date, r) %>"><%= revision_to_format_time_only(r) %></a></li>
       <% end %>
     </ul>
   </div>

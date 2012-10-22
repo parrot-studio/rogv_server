@@ -30,7 +30,7 @@
                       <% if @unlink %>
                         <%=h f.fort_name %>
                       <% else %>
-                        <a href="<%= url_for(:t, :fort_timeline_each, @situation.gv_date, map, num) %>"><%=h f.fort_name %></a>
+                        <a href="<%= url_for(:t, :fort_timeline, @situation.gv_date, map) %>"><%=h f.fort_name %></a>
                       <% end %>
                     </small><br/>
                     <small><%=h f.formal_name %></small><br/>

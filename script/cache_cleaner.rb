@@ -11,5 +11,7 @@ PADRINO_ENV = options[:env] if options[:env]
 require File.expand_path("../../config/boot.rb", __FILE__)
 
 ROGv::TotalResult.cache_clear!
+ROGv::FortTimeline.cache_clear!
+ROGv::GuildTimeline.cache_clear!
 
 exit

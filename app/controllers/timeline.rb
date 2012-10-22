@@ -50,21 +50,11 @@ module ROGv
     get :fort_timeline, :map => '/t/d/:date/f/:fort' do
       date_action do |date|
         fort = params[:fort]
-        @targets = (fort == 'SE' ? fort_ids_for_se : fort_ids_for(fort))
-        redirect url_for(:date, date) if @targets.empty?
-        @timeline = FortTimeline.build_for(date)
+        fs = (fort == 'SE' ? fort_types_se : (fort_types?(fort) ? fort : nil))
+        redirect url_for(:date, date) if fs.nil? || fs.empty?
+        @timeline = FortTimeline.build_for(date, fs)
         redirect url_for(:date, date) unless @timeline
-        render 'timeline/fort_timeline'
-      end
-    end
-
-    get :fort_timeline_each, :map => '/t/d/:date/f/:fort/:num' do
-      date_action do |date|
-        fid = "#{params[:fort]}#{params[:num]}"
-        redirect url_for(:t, :date, date) unless exist_fort?(fid)
-        @targets = [fid]
-        @timeline = FortTimeline.build_for(date)
-        redirect url_for(:t, :date, date) unless @timeline
+        @timeline.save if @timeline.new_record? && result_store_mode?
         render 'timeline/fort_timeline'
       end
     end
@@ -78,8 +68,11 @@ module ROGv
 
     get :guild_timeline, :map => '/t/d/:date/g/:name' do
       date_action do |date|
-        @timeline = GuildTimeline.build_for(date, decode_for_url(params[:name]))
+        gname = decode_for_url(params[:name])
+        @timeline = GuildTimeline.build_for(date, gname)
         redirect url_for(:t, :date, date) unless @timeline
+        @timeline.save if @timeline.new_record? && result_store_mode?
+        @names = [gname]
         render 'timeline/guild_timeline'
       end
     end
@@ -108,6 +101,8 @@ module ROGv
         redirect url_for(:t, :guild_timeline, date, encode_for_url(gs.first)) if gs.size == 1
         @timeline = GuildTimeline.build_for(date, gs)
         redirect url_for(:t, :date, date) unless @timeline
+        @timeline.save if @timeline.new_record? && result_store_mode?
+        @names = gs
         render 'timeline/guild_timeline'
       end
     end

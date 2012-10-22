@@ -47,7 +47,7 @@ module ROGv
       "#{rev[0..3]}/#{rev[4..5]}/#{rev[6..7]} #{rev[8..9]}:#{rev[10..11]}:#{rev[12..13]}"
     end
 
-    def revision_to_formet_time_only(rev)
+    def revision_to_format_time_only(rev)
       return unless rev
       "#{rev[8..9]}:#{rev[10..11]}:#{rev[12..13]}"
     end

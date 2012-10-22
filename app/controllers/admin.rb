@@ -70,14 +70,48 @@ module ROGv
       str = case params[:target].to_sym
       when :all
         TotalResult.cache_clear!
+        FortTimeline.cache_clear!
+        GuildTimeline.cache_clear!
         '全て'
       when :total
         TotalResult.cache_clear!
         '結果データ'
+      when :fort_timeline
+        FortTimeline.cache_clear!
+        '砦タイムラインデータ'
+      when :guild_timeline
+        GuildTimeline.cache_clear!
+        'ギルドタイムラインデータ'
       end
 
       flash[:info] = "#{str}のキャッシュをクリアしました" if str
       redirect url_for(:a, :cache)
+    end
+
+    get :result do
+      render 'admin/result'
+    end
+
+    post :result_add_total, :map => '/a/result' do
+      date = params[:add_total_date]
+      dates = if date
+        Situation.date_list.include?(date) ? [date] : []
+      else
+        last_date = TotalResult.all_total.gv_dates.max
+        Situation.date_list.select{|d| d > last_date}
+      end
+
+      dates.each do |d|
+        Situation.repair_duplication!(d)
+        wr = WeeklyResult.for_date(d)
+        wr ||= WeeklyResult.analyze_for(d)
+        next unless wr
+        wr.save! if wr.new_record?
+        TotalResult.add_result_to_all_total!(d)
+      end
+
+      flash[:info] = 'データ集計が完了しました'
+      redirect url_for(:a, :result)
     end
 
   end

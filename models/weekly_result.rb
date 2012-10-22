@@ -55,7 +55,7 @@ module ROGv
 
     def analyze_for(date)
       return unless date
-      ftl = FortTimeline.build_for(date)
+      ftl = FortTimelineBuilder.build_for(date)
       return unless ftl
 
       called = analyze_called(ftl)

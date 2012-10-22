@@ -1,85 +1,79 @@
 # coding: utf-8
 module ROGv
-  class FortTimeline
+  class FortTimeline < LabeledModel
+    include MongoMapper::Document
 
-    attr_reader :date
+    key :label,   String, :required => true
+    key :gv_date, String, :required => true
+    key :forts,   Array,  :required => true
+    key :revs,    Array,  :required => true
+    key :before_states, Hash, :required => true
+    key :states,  Hash, :required => true
+    key :results, Hash, :required => true
+    timestamps!
+    ensure_index :label
 
-    def self.build_for(date)
-      return unless date
-      ft = self.new
-      return unless ft.build_for(date)
-      ft
-    end
+    class << self
+      def build_for(date, *forts)
+        return unless date
+        flist = [forts].flatten.compact.uniq.select{|f| FortUtil.fort_types?(f)}
+        return if flist.empty?
+        targets = flist.map{|f| FortUtil.fort_ids_for(f)}.flatten
 
-    def build_for(d)
-      return unless d
-      @date = d
+        label = create_label(date, targets)
+        stored = self.for_label(label)
+        return stored if stored
 
-      ss = Situation.for_date(date).sort_by(&:update_time)
-      return if ss.empty?
-      bs = Situation.revision_before(ss.first.revision)
-      bs = ss.first if (bs.nil? || bs.gv_date != TimeUtil.before_gvdate(date))
+        ftl = FortTimelineBuilder.build_for(date)
+        return unless ftl
 
-      @before_date_fort = bs.forts_map
-      @forts = ss.inject({}){|h, s| h[s.update_time] = s.forts_map; h}
-
-      self
-    end
-
-    def times
-      @times ||= @forts.keys.sort
-      @times
-    end
-
-    def forts_for_time(time)
-      @forts ||={}
-      @forts[time] || {}
-    end
-
-    def fort(time, fid)
-      forts_for_time(time)[fid]
-    end
-
-    def before_date_fort(fid)
-      @before_date_fort ||= {}
-      @before_date_fort[fid]
-    end
-
-    def result
-      forts_for_time(times.last)
-    end
-
-    def result_for(fid)
-      result[fid]
-    end
-
-    def stay?(time, fid)
-      return false unless (time && fid)
-      bt = times.select{|t| t < time}.last
-      bf = bt ? fort(bt, fid) : before_date_fort(fid)
-      tf = fort(time, fid)
-      return false unless (tf && bf)
-
-      bf.guild_name == tf.guild_name ? true : false
-    end
-
-    def each_changed_time(targets, all = false)
-      times.each do |ti|
-        li = []
-        exist = false
-        targets.each do |ta|
-          f = fort(ti, ta)
-          li << case
-          when f.nil?
-            :none
-          when stay?(ti, ta)
-            :stay
-          else
-            exist = true
-            f.guild_name
-          end
+        before = targets.inject({}) do |h, t|
+          f = ftl.before_date_fort(t)
+          h[t] = f ? f.guild_name : ''
+          h
         end
-        yield(ti, li) if (all || exist)
+
+        results = targets.inject({}) do |h, t|
+          f = ftl.result_for(t)
+          h[t] = f ? f.guild_name : ''
+          h
+        end
+
+        states = {}
+        ftl.each_changed_time(targets, true) do |time, list|
+          states[TimeUtil.time_to_revision(time)] = targets.zip(list).inject({}){|h,d| h[d.first] = d.last;h}
+        end
+
+        ft = self.new
+        ft.label = label
+        ft.gv_date = date
+        ft.forts = targets
+        ft.revs = ftl.times.map{|t| TimeUtil.time_to_revision(t)}
+        ft.before_states = before
+        ft.states = states
+        ft.results = results
+
+        ft
+      end
+
+      def create_label(date, forts)
+        return if (date.nil? || forts.nil? || forts.empty?)
+        "#{date}_#{forts.sort.join('')}"
+      end
+
+      def caches
+        self.all
+      end
+
+      def cache_clear!
+        self.caches.each(&:destroy)
+      end
+    end
+
+    def each_changed_time(all = false)
+      self.states.each do |rev, datas|
+        next if !all && datas.values.all?{|s| s == :stay}
+        yield(rev, datas)
       end
     end
 

@@ -1,3 +1,4 @@
+<% date = @timeline.gv_date; targets = @timeline.forts %>
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
@@ -6,18 +7,13 @@
         <a href="<%= url_for(:t, :date_list) %>">Timeline</a> <span class="divider">&gt;</span>
       </li>
       <li>
-        <a href="<%= url_for(:t, :date, @timeline.date) %>"><%= devided_date(@timeline.date) %></a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :date, date) %>"><%= devided_date(date) %></a> <span class="divider">&gt;</span>
       </li>
       <li>Fort <span class="divider">&gt;</span></li>
-      <% if @targets.size > 5 %>
+      <% if targets.size > fort_nums.size %>
         <li class="active"><strong>SE</strong></li>
-      <% elsif @targets.size > 1 %>
-        <li class="active"><strong><%= @targets.first[0] %></strong></li>
       <% else %>
-        <li>
-          <a href="<%= url_for(:t, :fort_timeline, @timeline.date, @targets.first[0]) %>"><%= @targets.first[0] %></a> <span class="divider">&gt;</span>
-        </li>
-        <li class="active"><strong><%= @targets.first %></strong></li>
+        <li class="active"><strong><%= targets.first[0] %></strong></li>
       <% end %>
     </ul>
   </div>
@@ -27,8 +23,8 @@
     <table class="table-striped table-bordered">
       <thead>
         <tr>
-          <th class="span2"><%= devided_date(@timeline.date) %></th>
-          <% @targets.each do |t| %>
+          <th class="span2"><%= devided_date(date) %></th>
+          <% targets.each do |t| %>
             <th class="span3"><%= t %></th>
           <% end %>
         </tr>
@@ -36,27 +32,25 @@
       <tbody>
         <tr>
           <td class="span2 center">Start</td>
-          <% @targets.each do |t|
-            f = @timeline.before_date_fort(t)
-            v = (f ? f.guild_name : '-')
-          %>
-            <td class="span3 attention center"><strong><%= v %></strong></td>
+          <% targets.each do |t| %>
+            <td class="span3 attention center"><strong><%= @timeline.before_states[t] || '-' %></strong></td>
           <% end %>
         </tr>
-        <% @timeline.each_changed_time(@targets, params[:all]) do |ti, li| %>
+        <% @timeline.each_changed_time(params[:all]) do |rev, datas| %>
           <tr>
             <td class="span2 center">
-              <a href="<%= url_for(:t, :rev, @timeline.date, time_to_revision(ti)) %>"><%= format_time_only(ti) %></a>
+              <a href="<%= url_for(:t, :rev, date, rev) %>"><%= revision_to_format_time_only(rev) %></a>
             </td>
-            <% li.each do |g|
+            <% targets.each do |t|
+              g = datas[t]
               case g
-              when :none %>
+              when :none, nil %>
                 <td class="span3 center"><small>-</small></td>
               <% when :stay %>
                 <td class="span3 center"><small>↓</small></td>
               <% else %>
                 <td class="span3 center">
-                  <a href="<%= url_for(:t, :guild_timeline, @timeline.date, encode_for_url(g)) %>"><%= g %></a>
+                  <a href="<%= url_for(:t, :guild_timeline, date, encode_for_url(g)) %>"><%= g %></a>
                 </td>
               <% end %>
             <% end %>
@@ -64,11 +58,8 @@
         <% end %>
         <tr>
           <td class="span2 center">Result</td>
-          <% @targets.each do |t|
-            f = @timeline.result_for(t)
-            v = (f ? f.guild_name : '-')
-          %>
-            <td class="span3 attention center"><strong><%= v %></strong></td>
+          <% targets.each do |t| %>
+            <td class="span3 attention center"><strong><%= @timeline.results[t] || '-' %></strong></td>
           <% end %>
         </tr>
       </tbody>

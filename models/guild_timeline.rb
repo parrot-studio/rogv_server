@@ -1,107 +1,84 @@
 # coding: utf-8
 module ROGv
-  class GuildTimeline
+  class GuildTimeline < LabeledModel
+    include MongoMapper::Document
 
-    attr_reader :date
+    key :label,   String, :required => true
+    key :gv_date, String, :required => true
+    key :guilds,  Array,  :required => true
+    key :revs,    Array,  :required => true
+    key :before_states, Hash
+    key :states,  Hash, :required => true
+    key :results, Hash
+    timestamps!
+    ensure_index :label
 
-    def self.build_for(date, *names)
-      ft = self.new
-      return unless ft.build_for(date, names)
-      ft
-    end
+    class << self
+      def build_for(date, *guilds)
+        return unless date
+        glist = [guilds].flatten.compact.uniq.sort
+        return if glist.empty?
 
-    def build_for(d, ns)
-      return unless d
-      @date = d
-      @names = [ns].flatten.uniq.compact
-      return if names.empty?
+        label = create_label(date, glist)
+        stored = self.for_label(label)
+        return stored if stored
 
-      ss = Situation.for_date(date).sort_by(&:update_time)
-      return if ss.empty?
-      bs = Situation.revision_before(ss.first.revision)
-      bs = ss.first if (bs.nil? || bs.gv_date != TimeUtil.before_gvdate(date))
+        gtl = GuildTimelineBuilder.build_for(date, glist)
+        return unless gtl
 
-      @before_date_fort = create_owner_hash(bs)
-      @forts = ss.inject({}){|h, s| h[s.update_time] = create_owner_hash(s); h}
-
-      self
-    end
-
-    def names
-      @names ||= []
-      @names
-    end
-
-    def union?(n)
-      return false unless n
-      names.include?(n) ? true : false
-    end
-
-    def times
-      @times ||= forts.keys.sort
-      @times
-    end
-
-    def forts
-      @forts ||= {}
-      @forts
-    end
-
-    def initial_owner(fid)
-      @before_date_fort ||= {}
-      @before_date_fort[fid]
-    end
-
-    def initial_owner?(fid)
-      union?(initial_owner(fid)) ? true : false
-    end
-
-    def owner(time, fid)
-      return unless (time && fid)
-      (forts[time] || {})[fid]
-    end
-
-    def final_owner(fid)
-      owner(times.last, fid)
-    end
-
-    def final_owner?(fid)
-      union?(final_owner(fid)) ? true : false
-    end
-
-    def each_changed_time(all = false)
-      bt = nil
-      times.each do |ti|
-        h = {}
-        exist = false
-        forts[ti].each do |fid, name|
-          next unless name
-          beo = (bt ? owner(bt, fid) : initial_owner(fid))
-          h[fid] = if union?(name)
-            case
-            when name == beo
-              :stay
-            else
-              exist = true
-              name
-            end
-          else
-            if union?(beo)
-              exist = true
-              :lose
-            end
-          end
+        before = FortUtil.each_fort_id.inject({}) do |h, fid|
+          next h unless gtl.initial_owner?(fid)
+          h[fid] = gtl.initial_owner(fid)
+          h
         end
-        yield(ti, h) if (all || exist)
-        bt = ti
+
+        results = FortUtil.each_fort_id.inject({}) do |h, fid|
+          next h unless gtl.final_owner?(fid)
+          h[fid] = gtl.final_owner(fid)
+          h
+        end
+
+        states = {}
+        gtl.each_changed_time(true) do |time, h|
+          rsl = {}
+          h.each do |fid, state|
+            next unless state
+            rsl[fid] = state
+          end
+          states[TimeUtil.time_to_revision(time)] = rsl
+        end
+
+        gt = self.new
+        gt.label = label
+        gt.gv_date = date
+        gt.guilds = glist
+        gt.revs = gtl.times.map{|t| TimeUtil.time_to_revision(t)}
+        gt.before_states = before
+        gt.states = states
+        gt.results = results
+
+        gt
+      end
+
+      def create_label(date, guilds)
+        return if (date.nil? || guilds.nil? || guilds.empty?)
+        "#{date}_:_#{guilds.sort.join("_-_")}"
+      end
+
+      def caches
+        self.all
+      end
+
+      def cache_clear!
+        self.caches.each(&:destroy)
       end
     end
 
-    private
-
-    def create_owner_hash(s)
-      return unless s
-      s.forts.inject({}){|h, f| h[f.fort_id] = f.guild_name;h}
+    def each_changed_time(all = false)
+      self.states.each do |rev, datas|
+        next if !all && (datas.empty? || datas.values.all?{|s| s == :stay})
+        yield(rev, datas)
+      end
     end
 
   end
