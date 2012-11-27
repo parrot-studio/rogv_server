@@ -55,7 +55,8 @@ module ROGv
     def in_battle_time?(t = nil)
       t ||= DateTime.now
       return false unless t.sunday?
-      return false unless (19..22).include?(t.hour)
+      return false if t < DateTime.new(t.year, t.mon, t.mday, 19, 50, 0)
+      return false if t  > DateTime.new(t.year, t.mon, t.mday, 22, 10, 0)
       true
     end
 

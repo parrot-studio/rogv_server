@@ -3,7 +3,21 @@ module ROGv
   ROGv::Server.controllers :t do
 
     get :date_list, :map => '/t/d/?' do
-      @dlist = Situation.date_list
+      list = timeline_dates
+      default_size = ServerConfig.result_recently_size
+
+      @dlist = case
+      when params[:all]
+        list
+      when params[:recently]
+        size = params[:recently].to_i
+        redirect url_for(:t, :date_list) if (size <= 0 || size == default_size)
+        redirect url_for(:t, :date_list, :all => 1) if size > list.size
+        list.take(size)
+      else
+        list.take(default_size)
+      end
+
       render 'timeline/date_list'
     end
 

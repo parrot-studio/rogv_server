@@ -18,5 +18,11 @@
     <ul class="nav nav-tabs nav-stacked">
       <li><a href="<%= url_for(:r, :forts_date_list) %>">Dates</a></li>
     </ul>
+    <h3>History of Rulers</h3>
+    <ul class="nav nav-tabs nav-stacked">
+      <% ROGv::FortUtil.fort_types.each do |f| %>
+        <li><a href="<%= url_for(:r, :rulers, f) %>"><%= f %></a></li>
+      <% end %>
+    </ul>
   </div>
 </div>

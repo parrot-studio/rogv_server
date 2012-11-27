@@ -22,6 +22,7 @@ def add_total(d)
   raise 'totalize failed' unless wr
   wr.save! if wr.new_record?
   ROGv::TotalResult.add_result_to_all_total!(d)
+  ROGv::FortResult.add_result(d)
 end
 
 if date

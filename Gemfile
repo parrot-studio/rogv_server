@@ -24,6 +24,11 @@ gem 'rack-test', :require => "rack/test", :group => "test"
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'
 
+# pry
+gem 'pry'
+gem 'pry-padrino'
+gem 'pry-debugger', :group => 'development'
+
 # Or Padrino Edge
 # gem 'padrino', :git => 'git://github.com/padrino/padrino-framework.git'
 

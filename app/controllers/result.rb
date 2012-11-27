@@ -214,5 +214,15 @@ module ROGv
       render 'result/forts_result'
     end
 
+    get :rulers, :map => '/r/rulers' do
+      redirect url_for(:r, :menu)
+    end
+
+    get :rulers, :map => '/r/rulers/:fort' do
+      @rulers = FortResult.results_for(params[:fort])
+      redirect url_for(:r, :menu) unless @rulers
+      render 'result/rulers'
+    end
+
   end
 end

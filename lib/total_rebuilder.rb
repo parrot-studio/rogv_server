@@ -16,6 +16,10 @@ module ROGv
       drop_total_result
       mes "totalize_total_result"
       totalize_total_result
+      mes "fort_result"
+      add_fort_result
+      mes "clear_cache"
+      clear_cache
       mes "complete!"
       true
     end
@@ -34,7 +38,7 @@ module ROGv
     end
 
     def drop_weekly_result
-      WeeklyResult.all.select{|r| r.source.nil? || !r.source.empty}.each(&:destroy)
+      WeeklyResult.all.select{|r| r.source.blank?}.each(&:destroy)
     end
 
     def totalize_weekly_result
@@ -47,6 +51,17 @@ module ROGv
 
     def totalize_total_result
       WeeklyResult.date_list.each{|d| TotalResult.add_result_to_all_total!(d)}
+    end
+
+    def add_fort_result
+      FortResult.all.each(&:destroy)
+      WeeklyResult.date_list.each{|d| FortResult.add_result(d)}
+    end
+
+    def clear_cache
+      TotalResult.cache_clear!
+      FortTimeline.cache_clear!
+      GuildTimeline.cache_clear!
     end
 
   end

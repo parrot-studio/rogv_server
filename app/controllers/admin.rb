@@ -108,6 +108,7 @@ module ROGv
         next unless wr
         wr.save! if wr.new_record?
         TotalResult.add_result_to_all_total!(d)
+        FortResult.add_result(d)
       end
 
       flash[:info] = 'データ集計が完了しました'

@@ -54,7 +54,7 @@ module ROGv
     def date_action
       @date = params[:date]
       redirect url_for(:date_list) unless @date
-      redirect url_for(:date_list) unless Situation.date_list.include?(@date)
+      redirect url_for(:date_list) unless timeline_dates.include?(@date)
       yield(@date)
     end
 

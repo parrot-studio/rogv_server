@@ -13,6 +13,12 @@ module ROGv
       cache("#{ServerConfig.memcache_header}_#{name}", :expires_in => expires, &b)
     end
 
+    def timeline_dates
+      get_with_cache("timeline_dates", 30) do
+        Situation.date_list
+      end
+    end
+
     def revs_for_date(date)
       return [] unless date
       get_with_cache("revs_for_#{date}", 30) do
