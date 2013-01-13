@@ -14,15 +14,20 @@ module ROGv
     ensure_index :label
 
     class << self
-      def build_for(date, *forts)
+      def get_for(date, *forts)
         return unless date
-        flist = [forts].flatten.compact.uniq.select{|f| FortUtil.fort_types?(f)}
-        return if flist.empty?
-        targets = flist.map{|f| FortUtil.fort_ids_for(f)}.flatten
+        targets = target_from_forts(forts)
+        return if targets.empty?
 
         label = create_label(date, targets)
         stored = self.for_label(label)
-        return stored if stored
+        stored ? stored : build_for(date, forts)
+      end
+
+      def build_for(date, *forts)
+        return unless date
+        targets = target_from_forts(forts)
+        return if targets.empty?
 
         ftl = FortTimelineBuilder.build_for(date)
         return unless ftl
@@ -45,7 +50,7 @@ module ROGv
         end
 
         ft = self.new
-        ft.label = label
+        ft.label = create_label(date, targets)
         ft.gv_date = date
         ft.forts = targets
         ft.revs = ftl.times.map{|t| TimeUtil.time_to_revision(t)}
@@ -67,6 +72,13 @@ module ROGv
 
       def cache_clear!
         self.caches.each(&:destroy)
+      end
+
+      private
+
+      def target_from_forts(forts)
+        flist = [forts].flatten.compact.uniq.select{|f| FortUtil.fort_types?(f)}
+        flist.map{|f| FortUtil.fort_ids_for(f)}.flatten
       end
     end
 

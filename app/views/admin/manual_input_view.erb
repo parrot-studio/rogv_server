@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:a, :index) %>">管理メニュー</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:a, :manual_input) %>">結果手動入力</a> <span class="divider">&gt;</span>
+      </li>
+      <li><%= devided_date(@result.gv_date) %></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>結果手動入力 : <%= devided_date(@result.gv_date) %></h3>
+  </div>
+</div>
+<% date = Date.parse(@result.gv_date) %>
+<div class="row">
+  <div class="span6">
+    <% case
+    when flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% when flash[:info] %>
+      <div class="alert alert-success">
+        <p>
+          <%= flash[:info] %>
+        </p>
+      </div>
+    <% when @result.analyzed? %>
+      <div class="alert">
+        <p>
+          自動生成された結果は手動で修正できません<br/>
+          <a href="<%= url_for(:a, :result) %>">再集計</a>を実行してください
+        </p>
+      </div>
+    <% when !@result.errors.empty? %>
+      <div class="alert alert-error">
+        <p>
+          <strong>
+            <% if @result.forts.empty? %>
+              <%= devided_date(@result.gv_date) %>の結果が入力されていません
+            <% else %>
+              <%= devided_date(@result.gv_date) %>の結果を更新できませんでした
+            <% end %>
+          </strong>
+        </p>
+      </div>
+    <% when @result.manual? && @result.new_record? && !date.sunday? %>
+      <div class="alert">
+        <p>
+          <strong><%= devided_date(@result.gv_date) %></strong>は日曜日ではありません<br/>
+          誤って指定した場合は<a href="<%= url_for(:a, :manual_input) %>">戻って選び直してください</a>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+  <div class="offset5 span1">
+    <% if @result.manual? && !@result.new_record? %>
+      <p>
+        <a href="#delete" role="button" class="btn btn-danger" data-toggle="modal">Delete</a>
+      </p>
+      <div id="delete" class="modal hide fade">
+        <div class="modal-header">
+          <h3>手動入力データ削除</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            手動入力した結果を削除します<br/>
+            集計に反映済みの場合は script/total_builder.rb で再集計が必要です<br/>
+            <br/>
+            よろしいですか？
+          </p>
+        </div>
+        <div class="modal-footer">
+          <% form_tag(url_for(:a, :manual_input_delete, @result.gv_date), :method => 'delete', :class => 'form-inline') do %>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">キャンセル</button>
+            <button type="submit" class="btn btn-danger">削除</button>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% form_tag(url_for(:a, :manual_input_update, @result.gv_date), :method => 'put', :class => 'form-inline') do %>
+  <div class="row">
+    <div class="span12">
+      <table class="table-striped table-bordered">
+        <thead>
+          <tr>
+            <th class="span2"><br/></th>
+            <th class="span3">1</th>
+            <th class="span3">2</th>
+            <th class="span3">3</th>
+            <th class="span3">4</th>
+            <th class="span3">5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% forts = @result.forts_map;
+          fort_types.each do |map| %>
+            <tr>
+              <th class="span2"><%=h map %></th>
+              <% fort_nums.each do |num|
+                f = forts["#{map}#{num}"] %>
+                <td class="span3">
+                  <% case %>
+                  <% when @result.analyzed? %>
+                    <p>
+                      <%=h ((f.nil? || f.guild_name.blank?) ? '-' : f.guild_name) %>
+                    </p>
+                  <% when @result.manual? %>
+                    <input type="text" class="input-medium" name="<%= "gname[#{map}][#{num}]" %>" value="<%= f ? f.guild_name : '' %>"/>
+                  <% else %>
+                    <p>-</p>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="offset5 span3">
+      <% if @result.manual? %>
+        <button type="submit" class="btn btn-primary">更新</button>
+      <% else %>
+        <button class="btn disabled" disabled>更新</button>
+      <% end %>
+      <a href="<%= url_for(:a, :manual_input) %>" class="btn btn-info">戻る</a>
+    </div>
+  </div>
+<% end %>

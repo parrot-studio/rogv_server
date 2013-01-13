@@ -115,5 +115,98 @@ module ROGv
       redirect url_for(:a, :result)
     end
 
+    get :manual_input, :map => '/a/manual_input' do
+      @results = if params[:all]
+        WeeklyResult.sort(:gv_date.desc)
+      else
+        WeeklyResult.manuals
+      end
+      render 'admin/manual_input'
+    end
+
+    post :manual_input_new, :map => '/a/manual_input' do
+      begin
+        date = format('%04d%02d%02d', params[:year].to_i, params[:month].to_i, params[:day].to_i)
+        Date.parse(date)
+        redirect url_for(:a, :manual_input_view, date)
+      rescue ArgumentError
+        flash[:error] = '日付指定が異常です'
+        redirect url_for(:a, :manual_input)
+      end
+    end
+
+    get :manual_input_view, :map => '/a/manual_input/:date' do
+      date = params[:date]
+      unless valid_gvdate?(date)
+        flash[:error] = '日付指定が異常です'
+        redirect url_for(:a, :manual_input)
+      end
+
+      @result = WeeklyResult.for_date(date) || lambda do
+        wr = WeeklyResult.new
+        wr.gv_date = date
+        wr.source = 'manual'
+        wr
+      end.call
+      render 'admin/manual_input_view'
+    end
+
+    post :manual_input_add_total, :map => '/a/manual_input/:date' do
+      date = params[:date]
+      unless valid_gvdate?(date)
+        flash[:error] = '日付指定が異常です'
+        redirect url_for(:a, :manual_input)
+      end
+
+      wr = WeeklyResult.for_date(date)
+      unless wr
+        flash[:error] = '指定された日付のデータは存在しません'
+        redirect url_for(:a, :manual_input)
+      end
+
+      TotalResult.add_result_to_all_total!(wr.gv_date)
+      FortResult.add_manual_result(wr)
+
+      flash[:info] = "#{devided_date(wr.gv_date)}の結果を反映しました"
+      redirect url_for(:a, :manual_input)
+    end
+
+    put :manual_input_update, :map => '/a/manual_input/:date' do
+      date = params[:date]
+      unless valid_gvdate?(date)
+        flash[:error] = '日付指定が異常です'
+        redirect url_for(:a, :manual_input)
+      end
+
+      @result = WeeklyResult.for_date(date) || lambda do
+        wr = WeeklyResult.new
+        wr.gv_date = date
+        wr.source = 'manual'
+        wr
+      end.call
+      if @result.analyzed?
+        flash[:error] = '自動集計済みの結果なので、手動更新できません'
+        redirect url_for(:a, :manual_input_view, date)
+      end
+
+      @result.parse_manual_inputs(params[:gname])
+      if @result.save
+        flash[:info] = "#{devided_date(date)}の結果を更新しました"
+        redirect url_for(:a, :manual_input_view, date)
+      else
+        render 'admin/manual_input_view'
+      end
+    end
+
+    delete :manual_input_delete, :map => '/a/manual_input/:date' do
+      date = params[:date]
+      result = WeeklyResult.for_date(date)
+      redirect url_for(:a, :manual_input) unless (result && result.manual?)
+
+      result.destroy
+      flash[:info] = "#{devided_date(date)}の結果を削除しました"
+      redirect url_for(:a, :manual_input)
+    end
+
   end
 end

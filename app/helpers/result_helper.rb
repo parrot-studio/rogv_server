@@ -43,7 +43,8 @@ module ROGv
     end
 
     def result_store_mode?
-      ServerConfig.result_store?
+      return false unless ServerConfig.result_store?
+      TimeUtil.in_battle_time? ? false : true
     end
 
     def exist_result_gvdates_pair?(from, to)

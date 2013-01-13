@@ -1,0 +1,143 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:a, :index) %>">管理メニュー</a> <span class="divider">&gt;</span>
+      </li>
+      <li>結果手動入力</li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <h3>結果手動入力</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span4">
+    <% case
+    when flash[:error] %>
+      <div class="alert alert-error">
+        <p>
+          <strong><%= flash[:error] %></strong>
+        </p>
+      </div>
+    <% when flash[:info] %>
+      <div class="alert alert-success">
+        <p>
+          <%= flash[:info] %>
+        </p>
+      </div>
+    <% else %>
+      <br/>
+    <% end %>
+  </div>
+</div>
+<%
+now = DateTime.now
+now_y = now.year
+now_m = now.month
+now_d = now.day
+years = ((now_y-2)..(now_y+1)).to_a.reverse
+total_dates = ROGv::TotalResult.all_total.gv_dates
+%>
+<div class="row">
+  <div class="span6">
+    <% form_tag(url_for(:a, :manual_input_new), :method => 'post', :class => 'form-inline well') do %>
+      <select class="input-mini" name="year">
+        <% years.each do |y| %>
+          <% if y == now_y %>
+            <option selected><%= y %></option>
+          <% else %>
+            <option><%= y %></option>
+          <% end %>
+        <% end %>
+      </select>年
+      <select class="input-mini" name="month">
+        <% (1..12).each do |m| %>
+          <% if m == now_m %>
+            <option selected><%= m %></option>
+          <% else %>
+            <option><%= m %></option>
+          <% end %>
+        <% end %>
+      </select>月
+      <select class="input-mini" name="day">
+        <% (1..31).each do |d| %>
+          <% if d == now_d %>
+            <option selected><%= d %></option>
+          <% else %>
+            <option><%= d %></option>
+          <% end %>
+        <% end %>
+      </select>日
+      <button type="submit" class="btn btn-primary">詳細入力</button>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th class="span2">Date</th>
+          <th class="span1">Type</th>
+          <td class="span3">
+            <% if params[:all] %>
+              <a href="<%= url_for(:a, :manual_input) %>">手動入力日のみ表示</a>
+            <% else %>
+              <a href="<%= url_for(:a, :manual_input, :all => 1) %>">自動集計日も表示</a>
+            <% end %>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @results.each do |r| %>
+          <tr>
+            <td><%= devided_date(r.gv_date) %></td>
+            <% case %>
+            <% when r.manual? %>
+              <td>手動</td>
+              <td>
+                <a href="<%= url_for(:a, :manual_input_view, r.gv_date) %>" class="btn btn-primary">Update</a>
+                <% unless total_dates.include?(r.gv_date) %>
+                  <a href="#addtotal<%= r.gv_date %>" role="button" class="btn btn-info" data-toggle="modal">Add Result</a>
+                  <div id="addtotal<%= r.gv_date %>" class="modal hide fade">
+                    <div class="modal-header">
+                      <h3>集計への追加</h3>
+                    </div>
+                    <div class="modal-body">
+                      <p>手動入力した結果を集計結果（Result）に追加します</p>
+                      <ul>
+                        <li>獲得回数のみを追加</li>
+                        <li>コール回数は全ギルドで0と扱われる</li>
+                        <li>獲得履歴での連続性は考慮されない（2週連続獲得や2時間防衛等）</li>
+                      </ul>
+                      <ul>
+                        <li>一度追加すると、手動入力を更新/削除しても反映されない</li>
+                        <li>再度反映させる場合は script/total_builder.rb で再集計</li>
+                      </ul>
+                      <p>よろしいですか？</p>
+                    </div>
+                    <div class="modal-footer">
+                      <% form_tag(url_for(:a, :manual_input_add_total, r.gv_date), :method => 'post', :class => 'form-inline') do %>
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">キャンセル</button>
+                        <button type="submit" class="btn btn-primary">追加</button>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </td>
+            <% when r.analyzed? %>
+              <td>自動</td>
+              <td>
+                <a href="<%= url_for(:a, :manual_input_view, r.gv_date) %>" class="btn">View</a>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -42,7 +42,7 @@ module ROGv
         dlist.each do |d|
           old = for_date(d)
           if old
-            force ? old.destroy : next
+            (force && old.analyzed?) ? old.destroy : next
           end
 
           wr = analyze_for(d)
@@ -50,6 +50,10 @@ module ROGv
           done << d
         end
         done
+      end
+
+      def manuals
+        self.where(:source => 'manual').sort(:gv_date.desc)
       end
     end
 
@@ -101,6 +105,64 @@ module ROGv
       date = self.class.date_list.select{|d| d > self.gv_date}.sort.first
       return unless date
       self.class.for_date(date)
+    end
+
+    def manual?
+      self.source == 'manual' ? true : false
+    end
+
+    def analyzed?
+      self.source.blank?
+    end
+
+    def parse_manual_inputs(inputs)
+      return if inputs.blank?
+      return unless manual?
+
+      # fort names
+      other = WeeklyResult.where(:source => nil).limit(1).first
+      org_forts = other ? other.forts_map : {}
+
+      # forts
+      forts = []
+      ruled = {}
+      time = Time.parse("#{self.gv_date}T22:00:00+09:00")
+      inputs.each do |fort, nums|
+        nums.each do |num, name|
+          next if name.blank?
+          fort_id = "#{fort}#{num}"
+          org = org_forts[fort_id]
+
+          f = Fort.new
+          f.fort_id = fort_id
+          f.fort_name = org ? org.fort_name : ''
+          f.formal_name = org ? org.formal_name : ''
+          f.guild_name = name
+          f.update_time = time
+          forts << f
+
+          ruled[name] ||= Hash.new(0)
+          ruled[name][fort] += 1
+        end
+      end
+
+      # guilds
+      # ruled => 砦数 called => なし
+      guilds = []
+      ruled.each do |gname, h|
+        g = GuildResult.new
+        g.name = gname
+        g.gv_date = self.gv_date
+        g.called = {}
+        g.ruled = Hash[h]
+        guilds << g
+      end
+
+      self.forts = forts
+      self.guilds = guilds.sort_by(&:score).reverse
+      self.guild_names = self.guilds.map(&:name)
+
+      self
     end
 
     private

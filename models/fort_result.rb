@@ -64,6 +64,35 @@ module ROGv
 
         true
       end
+
+      def add_manual_result(wr)
+        return unless (wr && wr.manual?)
+        date = wr.gv_date
+
+        FortUtil.fort_types.each do |fort|
+          # 継続情報なしで格納
+          results = {}
+          forts = wr.forts
+          forts.each do |f|
+            next unless f.fort_id.match(/\A#{fort}/)
+            results[f.fort_id] = f.guild_name
+          end
+
+          rsl = self.results_for(fort)
+          rsl ||= lambda do
+            fr = self.new
+            fr.label = "fort_result_#{fort}"
+            fr.fort = fort
+            fr
+          end.call
+
+          rsl.gv_dates = [rsl.gv_dates, date].flatten.compact.uniq.sort
+          rsl.rulers[date] = results
+          rsl.save!
+        end
+
+        true
+      end
     end
 
   end

@@ -66,7 +66,7 @@ module ROGv
         fort = params[:fort]
         fs = (fort == 'SE' ? fort_types_se : (fort_types?(fort) ? fort : nil))
         redirect url_for(:date, date) if fs.nil? || fs.empty?
-        @timeline = FortTimeline.build_for(date, fs)
+        @timeline = FortTimeline.get_for(date, fs)
         redirect url_for(:date, date) unless @timeline
         @timeline.save if @timeline.new_record? && result_store_mode?
         render 'timeline/fort_timeline'
@@ -83,7 +83,7 @@ module ROGv
     get :guild_timeline, :map => '/t/d/:date/g/:name' do
       date_action do |date|
         gname = decode_for_url(params[:name])
-        @timeline = GuildTimeline.build_for(date, gname)
+        @timeline = GuildTimeline.get_for(date, gname)
         redirect url_for(:t, :date, date) unless @timeline
         @timeline.save if @timeline.new_record? && result_store_mode?
         @names = [gname]
@@ -113,7 +113,7 @@ module ROGv
         gs = parse_union_code(params[:names], names)
         redirect url_for(:t, :union_select, date) if gs.empty?
         redirect url_for(:t, :guild_timeline, date, encode_for_url(gs.first)) if gs.size == 1
-        @timeline = GuildTimeline.build_for(date, gs)
+        @timeline = GuildTimeline.get_for(date, gs)
         redirect url_for(:t, :date, date) unless @timeline
         @timeline.save if @timeline.new_record? && result_store_mode?
         @names = gs

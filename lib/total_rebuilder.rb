@@ -55,7 +55,14 @@ module ROGv
 
     def add_fort_result
       FortResult.all.each(&:destroy)
-      WeeklyResult.date_list.each{|d| FortResult.add_result(d)}
+      WeeklyResult.sort(:gv_date.asc).each do |wr|
+        case
+        when wr.analyzed?
+          FortResult.add_result(wr.gv_date)
+        when wr.manual?
+          FortResult.add_manual_result(wr)
+        end
+      end
     end
 
     def clear_cache

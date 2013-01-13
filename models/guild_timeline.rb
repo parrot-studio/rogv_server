@@ -14,14 +14,20 @@ module ROGv
     ensure_index :label
 
     class << self
-      def build_for(date, *guilds)
+      def get_for(date, *guilds)
         return unless date
         glist = [guilds].flatten.compact.uniq.sort
         return if glist.empty?
 
         label = create_label(date, glist)
         stored = self.for_label(label)
-        return stored if stored
+        stored ? stored : build_for(date, guilds)
+      end
+
+      def build_for(date, *guilds)
+        return unless date
+        glist = [guilds].flatten.compact.uniq.sort
+        return if glist.empty?
 
         gtl = GuildTimelineBuilder.build_for(date, glist)
         return unless gtl
@@ -49,7 +55,7 @@ module ROGv
         end
 
         gt = self.new
-        gt.label = label
+        gt.label = create_label(date, glist)
         gt.gv_date = date
         gt.guilds = glist
         gt.revs = gtl.times.map{|t| TimeUtil.time_to_revision(t)}
