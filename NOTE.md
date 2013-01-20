@@ -43,13 +43,43 @@ READMEには書きたくないが、一応まとめないと困る何か
  - 宣伝フッタ：表示
 
 
-config/config.yml
+config/settings.yml
 ---------------
 #### 概要
 - YAML形式で記述
 - クローズドに運用する前提でPASS等は平文で書くようになっている。他のシステムと共有しないこと
  - ブラウザツールバー等でPASSが漏れるリスクはあることも留意すべき
  - システムがhttpsで運用されるといいのだけど、趣味のシステムでそこまでは・・・
+- v3.xまでの config.yml とは構造や名称が異なるため注意
+ - 設定の意味は同一
+
+#### 詳細
+- env : 環境設定
+ - server\_name : RO的な意味でのサーバ名。表示に使う
+ - sample\_mode view\_mode : モード説明参照
+ - attention\_minitues : 砦viewで強調表示するためのuptime。現在交戦中の可能性が高い場所を区別
+ - result/recently\_size : 結果表示のデフォルトデータ数
+ - result/min\_size result/max\_size : 結果表示の最小/最大データ数。負荷を考えて指定
+- cache : キャッシュ関連設定。Gv中とその前後は無効化される
+ - memcache : メモリキャッシュ（memcached）を利用するかの設定
+ - db : ストレージキャッシュを利用するかの設定。管理ツールかscriptでキャッシュ削除
+- db : mongodbへの接続情報
+ - name : スキーマ名
+- memcache : memcachedへの接続情報
+ - header : memcached上の名前空間。同じものを指定するとキャッシュが混在する
+- auth : 認証情報
+ - basic : Basic認証情報。ページアクセスそのものを制御
+ - admin : 管理ページ用認証情報
+  - expire_sec : 管理系セッション有効時間（現状うまく動作しない？）
+ - update_key : サーバ更新用key。Basic認証のIDとは別の長いものを設定する（※平文で扱われるので注意）
+ - delete_key : データを削除するためのkey（※平文で扱われるので注意）
+- viewer : rogv_viewerへの接続情報（設定不要）
+
+config/config.yml（v3.x以下）
+---------------
+#### 概要
+- v3.xまで使われていた設定ファイル
+- v4.1をリリースする際に削除予定
 
 #### 詳細
 - server\_name：RO的な意味でのサーバ名。表示に使う
@@ -102,7 +132,7 @@ from指定した場合、その日以降を集計する。（例：統合以後�
 - -s/--silent：サイレントモード。確認や実行状況の表示をおこなわない
 
 #### cache\_cleaner.rb
-集計キャッシュを全てクリアする。「result/store:true」の環境でのみ使用。
+ストレージ保存キャッシュを全てクリアする。「cache/db:true」の環境でのみ使用。
 memcachedと違い、mongodbへのキャッシュはいくらでも肥大化するため、それをクリアするためのもの
 
 - -e ENV/--env=ENV：実行環境指定（デフォルトはdevelopment）
@@ -118,9 +148,8 @@ memcachedと違い、mongodbへのキャッシュはいくらでも肥大化す�
 
 TODO
 ---------------
-- BootstrapのバージョンUP
 - 複数日をまたぐタイムラインの閲覧
-- config構造の整理
+- 共有ファイルUpload（リプレイなど）
 - TEへの対応
  - 仕様がわからないとどうしようも・・・
  - おそらくはコードを共有する別システムを作る感じになる予定

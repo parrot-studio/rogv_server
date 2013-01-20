@@ -30,6 +30,12 @@ https://github.com/parrot-studio/rogv_client
 
 ChangeLog
 ---------------
+#### ver4.0
+- 修正：BootstrapとjQueryのバージョンを変更
+- 修正：gemのバージョンを変更
+
+- 修正：設定項目を全体に見直し（詳細はNOTEを参照）
+
 #### ver3.4
 - 新規：砦取得結果の手動入力を追加（非参加時にも結果だけは入力可能に）
 

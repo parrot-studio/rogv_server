@@ -40,7 +40,7 @@ module ROGv
     def hot?(t)
       ut = uptime_from(t)
       return false unless ut
-      ut <= ROGv::ServerConfig.attention_minitues * 60 ? true : false
+      ut <= ROGv::ServerSettings.env.attention_minitues * 60 ? true : false
     end
   end
 end

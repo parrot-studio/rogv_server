@@ -30,11 +30,11 @@ module ROGv
     end
 
     def result_recently_size_default
-      ServerConfig.result_recently_size
+      ServerSettings.result_recently_size
     end
 
     def result_range
-      (ServerConfig.result_min_size..ServerConfig.result_max_size)
+      (ServerSettings.result_min_size..ServerSettings.result_max_size)
     end
 
     def valid_result_size?(n)
@@ -42,21 +42,11 @@ module ROGv
       result_range.include?(n) ? true : false
     end
 
-    def result_store_mode?
-      return false unless ServerConfig.result_store?
-      TimeUtil.in_battle_time? ? false : true
-    end
-
     def exist_result_gvdates_pair?(from, to)
       return false unless (from && to)
       return false unless (valid_gvdate?(from) && valid_gvdate?(to))
       return false unless (result_dates.include?(from) && result_dates.include?(to))
       true
-    end
-
-    def format_span(from, to)
-      return unless (from && to)
-      "#{devided_date(from)} - #{devided_date(to)}"
     end
 
   end

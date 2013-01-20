@@ -83,7 +83,7 @@ module ROGv
       redirect url_for(:r, :recently_all, result_recently_size_default) unless valid_result_size?(num)
       @total = TotalResult.totalize_recently_result(num)
       redirect url_for(:r, :recently_select) unless @total
-      @total.save if @total.new_record? && result_store_mode?
+      @total.save if @total.new_record? && use_db_cache?
       render 'result/recently_all'
     end
 
@@ -95,7 +95,7 @@ module ROGv
 
       tr = TotalResult.totalize_recently_result(num)
       redirect url_for(:r, :recently_select) unless tr
-      tr.save if tr.new_record? && result_store_mode?
+      tr.save if tr.new_record? && use_db_cache?
       @total = tr.guild_map[gname] || GuildResult.new(:name => gname)
       @timelines = tr.result_timeline_for(gname, params[:all]) || []
       render 'result/recently_guild'
@@ -110,7 +110,7 @@ module ROGv
 
       tr = TotalResult.totalize_recently_result(num)
       redirect url_for(:r, :recently_select) unless tr
-      tr.save if tr.new_record? && result_store_mode?
+      tr.save if tr.new_record? && use_db_cache?
       @guilds = @gnames.inject([]){|l, n| l << (tr.guild_map[n] || GuildResult.new(:name => n)); l}
       @total = @guilds.inject(GuildResult.new){|t, g| t.add_result(g); t}
       render 'result/recently_union'
@@ -158,7 +158,7 @@ module ROGv
       redirect url_for(:r, :span_select) unless valid_result_size?(dlist.size)
 
       @total = TotalResult.totalize_for_dates(dlist)
-      @total.save if @total.new_record? && result_store_mode?
+      @total.save if @total.new_record? && use_db_cache?
       render 'result/span_all'
     end
 
@@ -175,7 +175,7 @@ module ROGv
 
       tr = TotalResult.totalize_for_dates(dlist)
       redirect url_for(:r, :span_select) unless tr
-      tr.save if tr.new_record? && result_store_mode?
+      tr.save if tr.new_record? && use_db_cache?
       @dates = tr.gv_dates
       @total = tr.guild_map[gname] || GuildResult.new(:name => gname)
       @timelines = tr.result_timeline_for(gname, params[:all]) || []
@@ -196,7 +196,7 @@ module ROGv
 
       tr = TotalResult.totalize_for_dates(dlist)
       redirect url_for(:r, :span_select) unless tr
-      tr.save if tr.new_record? && result_store_mode?
+      tr.save if tr.new_record? && use_db_cache?
       @dates = tr.gv_dates
       @guilds = @gnames.inject([]){|l, n| l << (tr.guild_map[n] || GuildResult.new(:name => n)); l}
       @total = @guilds.inject(GuildResult.new){|t, g| t.add_result(g); t}

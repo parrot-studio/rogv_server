@@ -7,7 +7,7 @@ require 'rubygems' unless defined?(Gem)
 require 'bundler/setup'
 Bundler.require(:default, PADRINO_ENV)
 
-require File.expand_path(File.join(PADRINO_ROOT, 'config', 'server_config'))
+require File.expand_path(File.join(PADRINO_ROOT, 'config', 'server_settings'))
 
 ##
 # ## Enable devel logging
@@ -39,9 +39,9 @@ Padrino.before_load do
   require 'rack/session/dalli'
   Padrino.use Rack::Session::Dalli,
     :cache => ::Dalli::Client.new(
-    ROGv::ServerConfig.memcache_url,
+    ROGv::ServerSettings.memcache_url,
     :namespace => "rogv_session",
-    :expires_in => ROGv::ServerConfig.admin_expire_sec,
+    :expires_in => ROGv::ServerSettings.auth.admin.expire_sec,
     :compress => true
   )
 end

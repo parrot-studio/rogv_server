@@ -22,7 +22,7 @@ end
 exit unless wr
 
 c = HTTPClient.new
-res = c.post("http://#{ROGv::ServerConfig.update_target}/update", :result => wr.to_json)
+res = c.post("http://#{ROGv::ServerSettings.viewer_target}/update", :result => wr.to_json)
 raise "update error" unless HTTP::Status.successful?(res.status)
 
 exit

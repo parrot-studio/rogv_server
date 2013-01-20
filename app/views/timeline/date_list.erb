@@ -20,9 +20,9 @@
   <div class="span10">
     <p>
       <small>
-        <a href="<%= url_for(:t, :date_list) %>">Recent <%= ROGv::ServerConfig.result_recently_size %> weeks</a>
-        <% if ROGv::ServerConfig.result_max_size > ROGv::ServerConfig.result_recently_size %>
-          / <a href="<%= url_for(:t, :date_list, :recently => ROGv::ServerConfig.result_max_size) %>">Recent <%= ROGv::ServerConfig.result_max_size %> weeks</a>
+        <a href="<%= url_for(:t, :date_list) %>">Recent <%= ROGv::ServerSettings.result_recently_size %> weeks</a>
+        <% if ROGv::ServerSettings.result_max_size > ROGv::ServerSettings.result_recently_size %>
+          / <a href="<%= url_for(:t, :date_list, :recently => ROGv::ServerSettings.result_max_size) %>">Recent <%= ROGv::ServerSettings.result_max_size %> weeks</a>
         <% end %>
         / <a href="<%= url_for(:t, :date_list, :all => 1) %>">All dates</a>
       </small>

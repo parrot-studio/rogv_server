@@ -36,8 +36,8 @@
               if f %>
                 <td class="span3">
                   <p>
-                    <small><%=h f.fort_name %></small><br/>
-                    <small><%=h f.formal_name %></small><br/>
+                    <small  class="muted"><%=h f.fort_name %></small><br/>
+                    <small  class="muted"><%=h f.formal_name %></small><br/>
                     <strong><%=h f.guild_name %></strong>
                     <small>
                       <%= link_to('★', url_for(:r, :full_guild, encode_for_url(f.guild_name))) %>

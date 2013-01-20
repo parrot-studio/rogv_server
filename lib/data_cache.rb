@@ -3,14 +3,14 @@ module ROGv
   module DataCache
 
     def cache_enable?
-      return false unless ServerConfig.use_cache?
+      return false unless ServerSettings.use_memcache?
       return true if sample_mode?
       TimeUtil.in_battle_time? ? false : true
     end
 
     def get_with_cache(name, expires, &b)
       return b.call unless cache_enable?
-      cache("#{ServerConfig.memcache_header}_#{name}", :expires_in => expires, &b)
+      cache("#{ServerSettings.memcache.header}_#{name}", :expires_in => expires, &b)
     end
 
     def timeline_dates

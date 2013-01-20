@@ -11,6 +11,7 @@ gem 'sinatra-flash', :require => 'sinatra/flash'
 gem 'dalli'
 gem 'json'
 gem 'httpclient'
+gem 'settingslogic'
 
 # Component requirements
 gem 'erubis', "~> 2.7.0"

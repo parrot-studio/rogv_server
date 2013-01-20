@@ -6,7 +6,7 @@
     <% if @reload %>
       <meta http-equiv="Refresh" content="<%= @reload %>" />
     <% end %>
-    <%= stylesheet_link_tag 'bootstrap', 'main' %>
+    <%= stylesheet_link_tag 'bootstrap.min', 'bootstrap-responsive.min', 'main' %>
     <title>ROGv - Forts Watching System</title>
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -15,15 +15,17 @@
   <body>
     <div class="container">
       <div class="page-header">
-        <h1>ROGv <small>Forts Watching System (for <%= ROGv::ServerConfig.server_name %>)</small></h1>
+        <h1>ROGv <small>Forts Watching System (for <%= ROGv::ServerSettings.env.server_name %>)</small></h1>
       </div>
       <%= yield %>
     </div>
     <hr>
     <footer>
-      <p class="center">"ROGv - Forts Watching System" by @parrot_studio 2012</p>
+      <p class="center">
+        "ROGv - Forts Watching System" by <a href="https://twitter.com/parrot_studio/">@parrot_studio</a> 2012-2013
+      </p>
       <%= partial(:sample_footer) if sample_mode? %>
     </footer>
-    <%= javascript_include_tag 'jquery', 'bootstrap.min' %>
+    <%= javascript_include_tag 'jquery-1.8.3.min', 'bootstrap.min' %>
   </body>
 </html>

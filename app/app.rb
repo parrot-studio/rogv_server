@@ -14,7 +14,7 @@ module ROGv
     register Padrino::Cache
     enable :caching
     set :cache, Padrino::Cache::Store::Memcache.new(
-      ::Dalli::Client.new(ServerConfig.memcache_url, :exception_retry_limit => 1))
+      ::Dalli::Client.new(ServerSettings.memcache_url, :exception_retry_limit => 1))
 
     include DataCache
     include AdminAuth
@@ -35,9 +35,10 @@ module ROGv
     # layout  :my_layout            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
     #
 
-    unless ServerConfig.auth_sample_mode
+    unless ServerSettings.sample_mode?
       use Rack::Auth::Basic do |user, pass|
-        user == ServerConfig.auth_username && pass == ServerConfig.auth_password
+        basic = ServerSettings.auth.basic
+        user == basic.user && pass == basic.pass
       end
     end
 
@@ -60,14 +61,14 @@ module ROGv
 
     def protect_action
       (halt 403) unless updatable_mode?
-      (halt 403) unless params['k'] == ServerConfig.auth_key
+      (halt 403) unless params['k'] == ServerSettings.auth.update_key
       yield if block_given?
     end
 
     def valid_delete_key?(dkey)
       return false unless dkey
       return false if dkey.empty?
-      dkey == ServerConfig.auth_delete_key ? true : false
+      dkey == ServerSettings.auth.delete_key ? true : false
     end
 
     def encode_base64_for_url(s)

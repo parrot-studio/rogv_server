@@ -1,0 +1,105 @@
+production:
+  env:
+    server_name: Gimle
+    sample_mode: false
+    view_mode: false
+    attention_minitues: 5
+    result:
+      recently_size: 6
+      min_size: 4
+      max_size: 12
+  cache:
+    memcache: true
+    db: true
+  db:
+    name: rogv
+    user: hoge
+    pass: piyo
+  memcache:
+    server: localhost
+    port: 11211
+    header: hoge
+  auth:
+    basic:
+      user: hoge
+      pass: piyo
+    admin:
+      user: amistr
+      pass: mohumohu
+      expire_sec: 180
+    update_key: hogepiyo
+    delete_key: fizzbuzz
+  viewer:
+    host: localhost
+    port: 3000
+    path:
+development:
+  env:
+    server_name: Nounai
+    sample_mode: false
+    view_mode: false
+    attention_minitues: 5
+    result:
+      recently_size: 6
+      min_size: 4
+      max_size: 12
+  cache:
+    memcache: false
+    db: false
+  db:
+    name: rogv
+    user: hoge
+    pass: piyo
+  memcache:
+    server: localhost
+    port: 11211
+    header: devel
+  auth:
+    basic:
+      user: hoge
+      pass: piyo
+    admin:
+      user: amistr
+      pass: mohumohu
+      expire_sec: 180
+    update_key: hogepiyo
+    delete_key: fizzbuzz
+  viewer:
+    host: localhost
+    port: 3000
+    path:
+test:
+  env:
+    server_name: SakrayJ
+    sample_mode: false
+    view_mode: false
+    attention_minitues: 5
+    result:
+      recently_size: 6
+      min_size: 4
+      max_size: 12
+  cache:
+    memcache: false
+    db: false
+  db:
+    name: rogv
+    user: hoge
+    pass: piyo
+  memcache:
+    server: localhost
+    port: 11211
+    header: test
+  auth:
+    basic:
+      user: hoge
+      pass: piyo
+    admin:
+      user: amistr
+      pass: mohumohu
+      expire_sec: 180
+    update_key: hogepiyo
+    delete_key: fizzbuzz
+  viewer:
+    host: localhost
+    port: 3000
+    path:

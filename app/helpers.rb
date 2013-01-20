@@ -9,12 +9,12 @@ module ROGv
     end
 
     def sample_mode?
-      ServerConfig.auth_sample_mode ? true : false
+      ServerSettings.sample_mode? ? true : false
     end
 
     def updatable_mode?
       return false if sample_mode?
-      ServerConfig.auth_view_mode ? false : true
+      ServerSettings.view_mode? ? false : true
     end
 
     def encode_for_url(s)
@@ -23,6 +23,16 @@ module ROGv
 
     def decode_for_url(s)
       URI.decode_www_form_component(s.gsub("%20", "+"))
+    end
+
+    def use_db_cache?
+      return false unless ServerSettings.use_db_cache?
+      TimeUtil.in_battle_time? ? false : true
+    end
+
+    def format_span(from, to)
+      return unless (from && to)
+      "#{devided_date(from)} - #{devided_date(to)}"
     end
 
   end

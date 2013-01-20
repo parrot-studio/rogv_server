@@ -4,7 +4,7 @@ module ROGv
 
     get :date_list, :map => '/t/d/?' do
       list = timeline_dates
-      default_size = ServerConfig.result_recently_size
+      default_size = ServerSettings.result_recently_size
 
       @dlist = case
       when params[:all]
@@ -68,7 +68,7 @@ module ROGv
         redirect url_for(:date, date) if fs.nil? || fs.empty?
         @timeline = FortTimeline.get_for(date, fs)
         redirect url_for(:date, date) unless @timeline
-        @timeline.save if @timeline.new_record? && result_store_mode?
+        @timeline.save if @timeline.new_record? && use_db_cache?
         render 'timeline/fort_timeline'
       end
     end
@@ -85,7 +85,7 @@ module ROGv
         gname = decode_for_url(params[:name])
         @timeline = GuildTimeline.get_for(date, gname)
         redirect url_for(:t, :date, date) unless @timeline
-        @timeline.save if @timeline.new_record? && result_store_mode?
+        @timeline.save if @timeline.new_record? && use_db_cache?
         @names = [gname]
         render 'timeline/guild_timeline'
       end
@@ -115,7 +115,7 @@ module ROGv
         redirect url_for(:t, :guild_timeline, date, encode_for_url(gs.first)) if gs.size == 1
         @timeline = GuildTimeline.get_for(date, gs)
         redirect url_for(:t, :date, date) unless @timeline
-        @timeline.save if @timeline.new_record? && result_store_mode?
+        @timeline.save if @timeline.new_record? && use_db_cache?
         @names = gs
         render 'timeline/guild_timeline'
       end

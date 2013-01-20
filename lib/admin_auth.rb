@@ -3,8 +3,9 @@ module ROGv
   module AdminAuth
 
     def valid_admin?(user, pass)
-      return false unless ServerConfig.admin_user == user
-      return false unless ServerConfig.admin_pass == pass
+      admin_auth = ServerSettings.auth.admin
+      return false unless admin_auth.user == user
+      return false unless admin_auth.pass == pass
       true
     end
 
