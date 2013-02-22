@@ -30,7 +30,7 @@ module ROGv
           s.forts << f if f
         end
 
-        s.forts.empty? ? nil : s
+        s.valid? ? s : nil
       end
 
       def accept(data)
@@ -55,5 +55,9 @@ module ROGv
       save!
     end
 
+    def valid?
+      return false if self.forts.empty?
+      self.forts.any?{|f| FortUtil.exist_fort?(f.fort_id)} ? true : false
+    end
   end
 end

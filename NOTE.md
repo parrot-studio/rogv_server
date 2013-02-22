@@ -70,34 +70,10 @@ config/settings.yml
 - auth : 認証情報
  - basic : Basic認証情報。ページアクセスそのものを制御
  - admin : 管理ページ用認証情報
-  - expire_sec : 管理系セッション有効時間（現状うまく動作しない？）
+  - expire_sec : 管理系セッション有効時間
  - update_key : サーバ更新用key。Basic認証のIDとは別の長いものを設定する（※平文で扱われるので注意）
  - delete_key : データを削除するためのkey（※平文で扱われるので注意）
 - viewer : rogv_viewerへの接続情報（設定不要）
-
-config/config.yml（v3.x以下）
----------------
-#### 概要
-- v3.xまで使われていた設定ファイル
-- v4.1をリリースする際に削除予定
-
-#### 詳細
-- server\_name：RO的な意味でのサーバ名。表示に使う
-- attention\_minitues：砦viewで強調表示するためのuptime。現在交戦中の可能性が高い場所を区別
-- db：mongodbへの接続情報
-- auth/key：サーバ更新用key。Basic認証のIDとは別の長いものを設定する（※平文で扱われるので注意）
-- auth/username auth/password：Basic認証情報
-- auth/delete_key：データを削除するためのkey。廃止するかも（※平文で扱われるので注意）
-- auth/sample\_mode auth/view\_mode：モード説明参照
-- memcache/server memcache/port：memcachedへの接続情報
-- memcache/header：memcached上の名前空間。同じものを指定するとキャッシュが混在する
-- use\_cache：表示高速化キャッシュ（memcached）を利用するかの指定。Gv中とその前後は無効化される
-- admin/user admin/pass：管理系にログインするための情報
-- admin/expire\_sec：管理系セッション有効時間（現状うまく動作しない？）
-- result/recently\_size：結果表示のデフォルトデータ数
-- result/min\_size result/man\_size：結果表示の最小/最大データ数。負荷を考えて指定
-- result/store：集計結果をmongodbにキャッシュするかの指定
-
 
 script
 ---------------

@@ -2,6 +2,7 @@
 require 'base64'
 require 'securerandom'
 require 'digest/sha1'
+require 'rack/session/dalli'
 
 module ROGv
   class Server < Padrino::Application
@@ -9,6 +10,11 @@ module ROGv
     register Padrino::Mailer
     register Padrino::Helpers
 
+    use Rack::Session::Dalli,
+      :memcache_server => ServerSettings.memcache_url,
+      :namespace => "rogv_session_#{ROGv::ServerSettings.memcache.header}",
+      :expire_after => ROGv::ServerSettings.auth.admin.expire_sec,
+      :compress => true
     enable :sessions
 
     register Padrino::Cache

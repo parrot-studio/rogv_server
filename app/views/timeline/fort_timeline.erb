@@ -18,6 +18,10 @@
     </ul>
   </div>
 </div>
+<%
+bstates = @timeline.before_states || {}
+bstates = @timeline.states[@timeline.revs.first] if bstates.values.all?(&:blank?)
+%>
 <div class="row">
   <div class="span12">
     <table class="table-striped table-bordered">
@@ -33,7 +37,7 @@
         <tr>
           <td class="span2 center">Start</td>
           <% targets.each do |t| %>
-            <td class="span3 attention center"><strong><%= @timeline.before_states[t] || '-' %></strong></td>
+            <td class="span3 attention center"><strong><%= bstates[t] || '-' %></strong></td>
           <% end %>
         </tr>
         <% @timeline.each_changed_time(params[:all]) do |rev, datas| %>

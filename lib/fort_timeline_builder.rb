@@ -17,10 +17,19 @@ module ROGv
 
       ss = Situation.for_date(date).sort_by(&:update_time)
       return if ss.empty?
-      bs = Situation.revision_before(ss.first.revision)
-      bs = ss.first if (bs.nil? || bs.gv_date != TimeUtil.before_gvdate(date))
 
-      @before_date_fort = bs.forts_map
+      @before_date_fort = lambda do
+        # 先週のデータから取得
+        bs = Situation.revision_before(ss.first.revision)
+        next bs.forts_map if (bs && bs.gv_date == TimeUtil.before_gvdate(date))
+
+        # 結果データから取得
+        rsl = WeeklyResult.where(:gv_date.lt => date).sort(:gv_date.desc).limit(1).first
+        next rsl.forts_map if rsl
+
+        {}
+      end.call
+
       @forts = ss.inject({}){|h, s| h[s.update_time] = s.forts_map; h}
 
       self

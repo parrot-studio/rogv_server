@@ -36,14 +36,6 @@ require File.expand_path(File.join(PADRINO_ROOT, 'config', 'server_settings'))
 # Add your before (RE)load hooks here
 #
 Padrino.before_load do
-  require 'rack/session/dalli'
-  Padrino.use Rack::Session::Dalli,
-    :cache => ::Dalli::Client.new(
-    ROGv::ServerSettings.memcache_url,
-    :namespace => "rogv_session",
-    :expires_in => ROGv::ServerSettings.auth.admin.expire_sec,
-    :compress => true
-  )
 end
 
 ##
