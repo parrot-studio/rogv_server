@@ -8,6 +8,7 @@ module ROGv
         redirect url_for(:index) unless reload_cycle.include?(@reload)
       end
       @unlink = true
+      @nonav = true
       @situation = Situation.latest || Situation.new
       render :index
     end

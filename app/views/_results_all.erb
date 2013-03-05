@@ -3,22 +3,33 @@
   <div class="span9">
     <table class="table table-striped table-condensed">
       <thead>
-        <tr>
-          <th class="span3" rowspan="2">Guild</th>
-          <th colspan="3">Ruled</th>
-          <th colspan="3">Called</th>
-        </tr>
-        <tr>
-          <th class="span1">Total</th>
-          <th class="span1">SE</th>
-          <th class="span1">FE</th>
-          <th class="span1">Total</th>
-          <th class="span1">SE</th>
-          <th class="span1">FE</th>
-        </tr>
+        <% case
+        when gvtype_fe? %>
+          <tr>
+            <th class="span3" rowspan="2">Guild</th>
+            <th colspan="3">Ruled</th>
+            <th colspan="3">Called</th>
+          </tr>
+          <tr>
+            <th class="span1">Total</th>
+            <th class="span1">SE</th>
+            <th class="span1">FE</th>
+            <th class="span1">Total</th>
+            <th class="span1">SE</th>
+            <th class="span1">FE</th>
+          </tr>
+        <%  when gvtype_te? %>
+          <tr>
+            <th class="span3" rowspan="2">Guild</th>
+            <th class="span1">Ruled</th>
+            <th class="span1">Called</th>
+          </tr>
+        <% end %>
       </thead>
       <tbody>
         <% rlist = case
+        when gvtype_te?
+          rules.sort_by(&:score_for_te).reverse
         when result_view_for_se?
           rules.sort_by(&:score_for_se).reverse
         when result_view_for_fe?
@@ -40,12 +51,18 @@
                 <%= g.name %>
               <% end %>
             </td>
-            <td><%= g.ruled_count %></td>
-            <td><%= g.ruled_count_se %></td>
-            <td><%= g.ruled_count_fe %></td>
-            <td><%= g.called_count %></td>
-            <td><%= g.called_count_se %></td>
-            <td><%= g.called_count_fe %></td>
+            <% case
+            when gvtype_fe? %>
+              <td><%= g.ruled_count %></td>
+              <td><%= g.ruled_count_se %></td>
+              <td><%= g.ruled_count_fe %></td>
+              <td><%= g.called_count %></td>
+              <td><%= g.called_count_se %></td>
+              <td><%= g.called_count_fe %></td>
+            <%  when gvtype_te? %>
+              <td><%= g.ruled_count %></td>
+              <td><%= g.called_count %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
@@ -61,18 +78,28 @@
   <div class="span6">
     <table class="table table-striped  table-condensed">
       <thead>
-        <tr>
-          <th class="span3" rowspan="2">Guild</th>
-          <th colspan="3">Called</th>
-        </tr>
-        <tr>
-          <th class="span1">Total</th>
-          <th class="span1">SE</th>
-          <th class="span1">FE</th>
-        </tr>
+        <% case
+        when gvtype_fe? %>
+          <tr>
+            <th class="span3" rowspan="2">Guild</th>
+            <th colspan="3">Called</th>
+          </tr>
+          <tr>
+            <th class="span1">Total</th>
+            <th class="span1">SE</th>
+            <th class="span1">FE</th>
+          </tr>
+        <%  when gvtype_te? %>
+          <tr>
+            <th class="span3" rowspan="2">Guild</th>
+            <th class="span1">Called</th>
+          </tr>
+        <% end %>
       </thead>
       <tbody>
         <% clist = case
+        when gvtype_te?
+          calls.sort_by(&:score_for_te).reverse
         when result_view_for_se?
           calls.sort_by(&:score_for_se).reverse
         when result_view_for_fe?
@@ -94,9 +121,14 @@
                 <%= g.name %>
               <% end %>
             </td>
-            <td><%= g.called_count %></td>
-            <td><%= g.called_count_se %></td>
-            <td><%= g.called_count_fe %></td>
+            <% case
+            when gvtype_fe? %>
+              <td><%= g.called_count %></td>
+              <td><%= g.called_count_se %></td>
+              <td><%= g.called_count_fe %></td>
+            <%  when gvtype_te? %>
+              <td><%= g.called_count %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

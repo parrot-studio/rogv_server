@@ -1,4 +1,20 @@
-<% date = @timeline.gv_date; targets = @timeline.forts %>
+<%
+date = @timeline.gv_date
+targets = @timeline.forts
+view_target = if targets.size > fort_nums.size
+  case
+  when gvtype_fe?
+    'SE'
+  when gvtype_te?
+    'TE'
+  end
+else
+  targets.first[0]
+end
+
+bstates = @timeline.before_states || {}
+bstates = @timeline.states[@timeline.revs.first] if bstates.values.all?(&:blank?)
+%>
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
@@ -9,19 +25,16 @@
       <li>
         <a href="<%= url_for(:t, :date, date) %>"><%= devided_date(date) %></a> <span class="divider">&gt;</span>
       </li>
-      <li>Fort <span class="divider">&gt;</span></li>
-      <% if targets.size > fort_nums.size %>
-        <li class="active"><strong>SE</strong></li>
-      <% else %>
-        <li class="active"><strong><%= targets.first[0] %></strong></li>
-      <% end %>
+      <li>Fort Timeline <span class="divider">&gt;</span></li>
+      <li class="active"><strong><%= view_target %></strong></li>
     </ul>
   </div>
 </div>
-<%
-bstates = @timeline.before_states || {}
-bstates = @timeline.states[@timeline.revs.first] if bstates.values.all?(&:blank?)
-%>
+<div class="row">
+  <div class="span12">
+    <h3>Fort Timeline : <%= view_target %></h3>
+  </div>
+</div>
 <div class="row">
   <div class="span12">
     <table class="table-striped table-bordered">

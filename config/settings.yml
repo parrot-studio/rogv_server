@@ -1,9 +1,12 @@
 production:
   env:
     server_name: Gimle
+    gvtype: FE
     sample_mode: false
     view_mode: false
     attention_minitues: 5
+    timeline:
+      max_size: 4
     result:
       recently_size: 6
       min_size: 4
@@ -36,9 +39,12 @@ production:
 development:
   env:
     server_name: Nounai
+    gvtype: FE
     sample_mode: false
     view_mode: false
     attention_minitues: 5
+    timeline:
+      max_size: 4
     result:
       recently_size: 6
       min_size: 4
@@ -71,9 +77,12 @@ development:
 test:
   env:
     server_name: SakrayJ
+    gvtype: FE
     sample_mode: false
     view_mode: false
     attention_minitues: 5
+    timeline:
+      max_size: 4
     result:
       recently_size: 6
       min_size: 4

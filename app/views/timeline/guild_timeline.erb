@@ -1,4 +1,8 @@
-<% date = @timeline.gv_date %>
+<%
+date = @timeline.gv_date
+name_table = create_name_table(@names)
+gname = (@names.size == 1 ? @names.first : 'Union')
+%>
 <div class="row">
   <div class="span12">
     <ul class="breadcrumb">
@@ -22,18 +26,10 @@
 </div>
 <div class="row">
   <div class="span12">
-    <% name_hash = {}
-    if @names.size == 1
-      name_hash[@names.first] = '★' %>
-      <h3><%= @names.first %></h3>
-    <% else
-      ch = 'A'
-      @names.each do |n|
-        name_hash[n] = ch
-        ch = ch.succ
-      end %>
+    <h3><%= "#{gname} : #{devided_date(date)}" %></h3>
+    <% if @names.size > 1 %>
       <ul class="unstyled">
-        <% name_hash.each do |k, v| %>
+        <% name_table.each do |k, v| %>
           <li class="union">
             <%= v %> : <a href="<%= url_for(:t, :guild_timeline, date, encode_for_url(k)) %>"><%= k %></a>
           </li>
@@ -41,76 +37,6 @@
       </ul>
     <% end %>
   </div>
-  <div class="span12">
-    <table class="table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th class="span2"><%= devided_date(date) %></th>
-          <% fort_types.each do |ft| %>
-            <th colspan="<%= fort_nums.size %>">
-              <a href="<%= url_for(:t, :fort_timeline, date, ft) %>"><%= ft %></a>
-            </th>
-          <% end %>
-        </tr>
-        <tr>
-          <th><br/></th>
-          <% fort_types.size.times do %>
-            <% fort_nums.each do |num| %>
-              <th class="span1"><%= num %></th>
-            <% end %>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="span2 center">Start</td>
-          <%
-          starts = @timeline.before_states
-          each_fort_id do |fid|
-            if starts[fid] %>
-              <td class="span1 attention center guild-owner">
-                <strong><%= name_hash[starts[fid]] %></strong>
-              </td>
-            <% else %>
-              <td class="span1 center"><small>-</small></td>
-            <% end %>
-          <% end %>
-        </tr>
-        <% @timeline.each_changed_time(params[:all]) do |rev, h| %>
-          <tr>
-            <td class="span2 center">
-              <a href="<%= url_for(:t, :rev, date, rev) %>"><%= revision_to_format_time_only(rev) %></a>
-            </td>
-            <% each_fort_id do |fid| %>
-              <% case h[fid]
-              when nil %>
-                <td class="span1 center"><small>-</small></td>
-              <% when :stay %>
-                <td class="span1 center guild-stay"><small>↓</small></td>
-              <% when :lose %>
-                <td class="span1 center guild-lose"><small>×</small></td>
-              <% else %>
-                <td class="span1 center guild-owner"><%= name_hash[h[fid]] %></td>
-              <% end %>
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-        <tr>
-          <td class="span2 center">Result</td>
-          <%
-          results = @timeline.results
-          each_fort_id do |fid| %>
-            <% if results[fid] %>
-              <td class="span1 attention center guild-owner">
-                <strong><%= name_hash[results[fid]] %></strong>
-              </td>
-            <% else %>
-              <td class="span1 center"><small>-</small></td>
-            <% end %>
-          <% end %>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </div>
+<%= partial :guild_timeline,
+  :locals => {:date => date, :timeline =>@timeline, :name_table => name_table} %>

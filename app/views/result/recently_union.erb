@@ -23,7 +23,7 @@
       <li class="union">Guild : </li>
       <% @gnames.each do |n| %>
         <li class="union">
-          <a href="<%= url_for(:r, :full_guild, encode_for_url(n)) %>"><%= n %></a></li>
+          <a href="<%= url_for(:r, :recently_guild, params[:num], encode_for_url(n)) %>"><%= n %></a></li>
       <% end %>
     </ul>
   </div>

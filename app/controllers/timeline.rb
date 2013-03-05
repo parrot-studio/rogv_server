@@ -2,7 +2,7 @@
 module ROGv
   ROGv::Server.controllers :t do
 
-    get :date_list, :map => '/t/d/?' do
+    get :date_list, :map => '/t' do
       list = timeline_dates
       default_size = ServerSettings.result_recently_size
 
@@ -64,10 +64,18 @@ module ROGv
     get :fort_timeline, :map => '/t/d/:date/f/:fort' do
       date_action do |date|
         fort = params[:fort]
-        fs = (fort == 'SE' ? fort_types_se : (fort_types?(fort) ? fort : nil))
-        redirect url_for(:date, date) if fs.nil? || fs.empty?
+        fs = case fort
+        when 'SE'
+          fort_types_se
+        when 'TE'
+          fort_types_te
+        else
+          fort_types?(fort) ? fort : nil
+        end
+
+        redirect url_for(:t, :date, date) if fs.nil? || fs.empty?
         @timeline = FortTimeline.get_for(date, fs)
-        redirect url_for(:date, date) unless @timeline
+        redirect url_for(:t, :date, date) unless @timeline
         @timeline.save if @timeline.new_record? && use_db_cache?
         render 'timeline/fort_timeline'
       end
@@ -110,15 +118,80 @@ module ROGv
     get :union_timeline, :map => '/t/d/:date/u/:names' do
       date_action do |date|
         names = guild_names_for_date(date)
-        gs = parse_union_code(params[:names], names)
-        redirect url_for(:t, :union_select, date) if gs.empty?
-        redirect url_for(:t, :guild_timeline, date, encode_for_url(gs.first)) if gs.size == 1
-        @timeline = GuildTimeline.get_for(date, gs)
+        @names = parse_union_code(params[:names], names)
+        redirect url_for(:t, :union_select, date) if @names.empty?
+        redirect url_for(:t, :guild_timeline, date, encode_for_url(gs.first)) if @names.size == 1
+        @timeline = GuildTimeline.get_for(date, @names)
         redirect url_for(:t, :date, date) unless @timeline
         @timeline.save if @timeline.new_record? && use_db_cache?
-        @names = gs
         render 'timeline/guild_timeline'
       end
+    end
+
+    get :span_union_select, :map => '/t/span' do
+      @dlist = timeline_dates
+      @names = guild_names_for_all_total
+      render 'timeline/span_union'
+    end
+
+    post :span_union_select_build, :map => '/t/span' do
+      from = params['span-from-guild']
+      to = params['span-to-guild']
+      redirect url_for(:t, :span_union_select) unless exist_timeline_gvdates_pair?(from, to)
+      gs = parse_guild_params(params[:guild], guild_names_for_all_total)
+      redirect url_for(:t, :span_union_select) if gs.empty?
+      redirect url_for(:t, :span_guild_timeline, *([from, to].sort), encode_for_url(gs.first)) if gs.size == 1
+      redirect url_for(:t, :span_union_timeline, *([from, to].sort), create_union_code(gs))
+    end
+
+    get :span_guild_timeline, :map => '/t/span/:from-:to/g/:name' do
+      gname = decode_for_url(params[:name])
+      redirect url_for(:t, :span_union_select) unless guild_names_for_all_total.include?(gname)
+
+      from = params[:from]
+      to = params[:to]
+      redirect url_for(:t, :span_union_select) unless exist_timeline_gvdates_pair?(from, to)
+      redirect url_for(:t, :span_guild_timeline, to, from, params[:name]) if from > to
+      @dlist = timeline_dates.select{|d| d >= from}.select{|d| d <= to}.sort
+      redirect url_for(:t, :guild_timeline, @dlist.first, params[:name]) if @dlist.size == 1
+      redirect url_for(:t, :span_union_select) unless valid_span_timeline_size?(@dlist.size)
+
+      @timelines = {}
+      @dlist.each do |date|
+        tl = GuildTimeline.get_for(date, gname)
+        next unless tl
+        tl.save if tl.new_record? && use_db_cache?
+        @timelines[date] = tl
+      end
+      redirect url_for(:t, :span_union_select) if @timelines.empty?
+      @names = [gname]
+
+      render 'timeline/span_timeline'
+    end
+
+    get :span_union_timeline, :map => '/t/span/:from-:to/u/:names' do
+      from = params[:from]
+      to = params[:to]
+      redirect url_for(:t, :span_union_select) unless exist_timeline_gvdates_pair?(from, to)
+      redirect url_for(:t, :span_union_timeline, to, from, params[:name]) if from > to
+      @dlist = timeline_dates.select{|d| d >= from}.select{|d| d <= to}.sort
+      redirect url_for(:t, :union_timeline, @dlist.first, params[:names]) if @dlist.size == 1
+      redirect url_for(:t, :span_union_select) unless valid_span_timeline_size?(@dlist.size)
+
+      @names = parse_union_code(params[:names], guild_names_for_all_total)
+      redirect url_for(:t, :span_union_select) if @names.empty?
+      redirect url_for(:t, :span_guild_timeline, from, to, encode_for_url(@names.first)) if @names.size == 1
+
+      @timelines = {}
+      @dlist.each do |date|
+        tl = GuildTimeline.get_for(date, @names)
+        next unless tl
+        tl.save if tl.new_record? && use_db_cache?
+        @timelines[date] = tl
+      end
+      redirect url_for(:t, :span_union_select) if @timelines.empty?
+
+      render 'timeline/span_timeline'
     end
 
   end

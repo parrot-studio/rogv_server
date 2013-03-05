@@ -17,13 +17,15 @@
     <h3>Full Result : All Guild<%= result_subtitle %></h3>
   </div>
 </div>
-<div class="row">
-  <div class="offset6 span3">
-    priority : <%= link_to('Total', url_for(:r, :full_all), :unless => result_view_for_all?) %>
-    / <%= link_to('SE', url_for(:r, :full_all, :priority => 'se'), :unless => result_view_for_se?) %>
-    / <%= link_to('FE', url_for(:r, :full_all, :priority => 'fe'), :unless => result_view_for_fe?) %>
+<% unless gvtype_te? %>
+  <div class="row">
+    <div class="offset6 span3">
+      priority : <%= link_to('Total', url_for(:r, :full_all), :unless => result_view_for_all?) %>
+      / <%= link_to('SE', url_for(:r, :full_all, :priority => 'se'), :unless => result_view_for_se?) %>
+      / <%= link_to('FE', url_for(:r, :full_all, :priority => 'fe'), :unless => result_view_for_fe?) %>
+    </div>
   </div>
-</div>
+<% end %>
 <div class="row">
   <div class="span9">
     <hr/>

@@ -10,10 +10,15 @@
         <a href="<%= url_for(:t, :date, @situation.gv_date) %>"><%= devided_date(@situation.gv_date) %></a> <span class="divider">&gt;</span>
       </li>
       <li>
-        <a href="<%= url_for(:t, :rev_list, @situation.gv_date) %>">Time List</a> <span class="divider">&gt;</span>
+        <a href="<%= url_for(:t, :rev_list, @situation.gv_date) %>">Situation</a> <span class="divider">&gt;</span>
       </li>
       <li class="active"><strong><%= format_time_only(@situation.update_time) %></strong></li>
     </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3>Situation : <%= format_time(@situation.update_time) %></h3>
   </div>
 </div>
 <%= partial :forts_table %>

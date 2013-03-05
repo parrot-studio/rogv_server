@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:t, :date_list) %>">Timeline</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong>Guild with Span</strong></li>
+    </ul>
+  </div>
+</div>
+<%
+from_default = @dlist.second
+opts = "<option value=''>-</option>"
+@names.sort.each do |n|
+  opts << "<option>#{n}</option>"
+end
+%>
+<div class="row">
+  <div class="span6">
+    <form class="form-inline" action="<%= url_for(:t, :span_union_select_build) %>" method="post">
+      <div class="span6">
+        <fieldset>
+          <legend>Select Guild or Union, and Span</legend>
+          <div class="form-actions">
+            <label class="control-label" for="span-from-guild">from : </label>
+            <select id="span-from-guild" name="span-from-guild" class="span2">
+              <% @dlist.each do |d| %>
+                <option value="<%= d %>"<%= ' selected' if d == from_default %>><%= devided_date(d) %></option>
+              <% end %>
+            </select>
+            <label class="control-label" for="span-to-guild">to : </label>
+            <select id="span-to-guild" name="span-to-guild" class="span2">
+              <% @dlist.each do |d| %>
+                <option value="<%= d %>"><%= devided_date(d) %></option>
+              <% end %>
+            </select>
+            <p><small>max : <%= ROGv::ServerSettings.timeline_max_size %>weeks</small></p>
+          </div>
+          <% (1..8).each do |i| %>
+            <div class="control-group">
+              <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>
+              <div class="controls">
+                <select id="guild_<%= i %>" name="guild[]">
+                  <%= opts %>
+                </select>
+              </div>
+            </div>
+          <% end %>
+        </fieldset>
+      </div>
+      <div class="span3">
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">View Timeline</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

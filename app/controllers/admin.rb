@@ -98,7 +98,7 @@ module ROGv
         Situation.date_list.include?(date) ? [date] : []
       else
         last_date = TotalResult.all_total.gv_dates.max
-        Situation.date_list.select{|d| d > last_date}
+        last_date ? Situation.date_list.select{|d| d > last_date} : Situation.date_list
       end
 
       dates.each do |d|

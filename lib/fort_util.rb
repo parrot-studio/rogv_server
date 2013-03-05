@@ -4,8 +4,25 @@ module ROGv
 
     module_function
 
+    def gvtype_fe?
+      ServerSettings.gvtype_fe? ? true : false
+    end
+
+    def gvtype_se?
+      gvtype_fe? ? true : false
+    end
+
+    def gvtype_te?
+      ServerSettings.gvtype_te? ? true : false
+    end
+
     def fort_types
-      [fort_types_fe, fort_types_se].flatten
+      case
+      when gvtype_fe?
+        [fort_types_fe, fort_types_se].flatten
+      when gvtype_te?
+        fort_types_te
+      end
     end
 
     def fort_types_fe
@@ -14,6 +31,10 @@ module ROGv
 
     def fort_types_se
       ['N', 'F']
+    end
+
+    def fort_types_te
+      ['G', 'K']
     end
 
     def fort_nums
@@ -33,6 +54,11 @@ module ROGv
     def fort_types_se?(t)
       return unless t
       fort_types_se.include?(t) ? true : false
+    end
+
+    def fort_types_te?(t)
+      return unless t
+      fort_types_te.include?(t) ? true : false
     end
 
     def exist_fort?(t)
@@ -60,6 +86,10 @@ module ROGv
 
     def fort_ids_for_se
       fort_types_se.map{|f| fort_ids_for(f)}.flatten
+    end
+
+    def fort_ids_for_te
+      fort_types_te.map{|f| fort_ids_for(f)}.flatten
     end
 
   end

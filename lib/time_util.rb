@@ -54,10 +54,15 @@ module ROGv
 
     def in_battle_time?(t = nil)
       t ||= DateTime.now
-      return false unless t.sunday?
       return false if t < DateTime.new(t.year, t.mon, t.mday, 19, 50, 0)
       return false if t  > DateTime.new(t.year, t.mon, t.mday, 22, 10, 0)
-      true
+
+      case
+      when ServerSettings.gvtype_fe?
+        t.sunday? ? true : false
+      when ServerSettings.gvtype_te?
+        t.saturday? ? true : false
+      end
     end
 
     def shift_gvdate(gd, diff)

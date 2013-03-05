@@ -15,6 +15,26 @@ module ROGv
         self.env.view_mode ? true : false
       end
 
+      def gvtype
+        t = self.env.gvtype.to_s
+        case t.upcase
+        when 'FE', 'SE', 'FESE'
+          'FE'
+        when 'TE'
+          'TE'
+        else
+          'FE'
+        end
+      end
+
+      def gvtype_fe?
+        gvtype == 'FE' ? true : false
+      end
+
+      def gvtype_te?
+        gvtype == 'TE' ? true : false
+      end
+
       def memcache_url
         "#{self.memcache.server}:#{self.memcache.port}"
       end
@@ -47,6 +67,11 @@ module ROGv
         val = self.env.result.recently_size.to_i
         return result_recently_size_defalut if val < result_min_size || val > result_max_size
         val
+      end
+
+      def timeline_max_size
+        val = self.env.timeline.max_size.to_i
+        val > 1 ? val : 1
       end
 
       def viewer_target

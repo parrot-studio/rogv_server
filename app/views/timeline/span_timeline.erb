@@ -1,0 +1,40 @@
+<%
+from = params[:from]
+to = params[:to]
+span_label = format_span(from, to)
+gname = (@names.size == 1 ? @names.first : 'Union')
+name_table = create_name_table(@names)
+%>
+<div class="row">
+  <div class="span12">
+    <ul class="breadcrumb">
+      <%= partial :menu_crumb %>
+      <li>
+        <a href="<%= url_for(:t, :date_list) %>">Timeline</a> <span class="divider">&gt;</span>
+      </li>
+      <li>
+        <a href="<%= url_for(:t, :span_union_select) %>">Guild with Span</a> <span class="divider">&gt;</span>
+      </li>
+      <li class="active"><strong><%= "#{span_label} : #{gname}" %></strong></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <h3><%= "#{gname} : #{span_label}" %></h3>
+    <% if @names.size > 1 %>
+      <ul class="unstyled">
+        <% name_table.each do |k, v| %>
+          <li class="union">
+            <%= v %> : <a href="<%= url_for(:t, :span_guild_timeline, from, to, encode_for_url(k)) %>"><%= k %></a>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+<% @dlist.each do |date| %>
+  <%= partial :guild_timeline,
+    :locals => {:date => date, :timeline =>@timelines[date],
+    :name_table => name_table} %>
+<% end %>

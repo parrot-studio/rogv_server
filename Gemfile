@@ -1,5 +1,5 @@
 # coding: utf-8
-source :rubygems
+source 'https://rubygems.org'
 
 # Server requirements
 # gem 'thin' # or mongrel
@@ -28,7 +28,7 @@ gem 'padrino', '0.10.7'
 # pry
 gem 'pry'
 gem 'pry-padrino'
-gem 'pry-debugger', :group => 'development'
+#gem 'pry-debugger', :group => 'development'
 
 # Or Padrino Edge
 # gem 'padrino', :git => 'git://github.com/padrino/padrino-framework.git'

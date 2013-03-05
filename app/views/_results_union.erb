@@ -1,5 +1,13 @@
+<%
+size = case
+when gvtype_fe?
+  12
+when gvtype_te?
+  6
+end
+%>
 <div class="row">
-  <div class="span12">
+  <div class="span<%= size %>">
     <h4>Total</h4>
     <table class="table table-condensed">
       <thead>
@@ -13,7 +21,7 @@
 </div>
 <% unless @guilds.empty? %>
   <div class="row">
-    <div class="span12">
+    <div class="span<%= size %>">
       <h4>Guilds</h4>
       <table class="table table-condensed">
         <thead>

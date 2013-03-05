@@ -25,13 +25,15 @@ span_label = format_span(from, to)
     <h3><%= span_label %> (<%= @total.gv_dates.size %>weeks) Result : All Guild<%= result_subtitle %></h3>
   </div>
 </div>
-<div class="row">
-  <div class="offset6 span3">
-    priority : <%= link_to('Total', url_for(:r, :span_all, from, to), :unless => result_view_for_all?) %>
-    / <%= link_to('SE', url_for(:r, :span_all,  from, to, :priority => 'se'), :unless => result_view_for_se?) %>
-    / <%= link_to('FE', url_for(:r, :span_all,  from, to, :priority => 'fe'), :unless => result_view_for_fe?) %>
+<% unless gvtype_te? %>
+  <div class="row">
+    <div class="offset6 span3">
+      priority : <%= link_to('Total', url_for(:r, :span_all, from, to), :unless => result_view_for_all?) %>
+      / <%= link_to('SE', url_for(:r, :span_all,  from, to, :priority => 'se'), :unless => result_view_for_se?) %>
+      / <%= link_to('FE', url_for(:r, :span_all,  from, to, :priority => 'fe'), :unless => result_view_for_fe?) %>
+    </div>
   </div>
-</div>
+<% end %>
 <div class="row">
   <div class="span9">
     <hr/>

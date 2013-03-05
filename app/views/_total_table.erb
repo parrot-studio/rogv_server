@@ -18,24 +18,38 @@
   </td>
   <td class="span1">Called</td>
   <td class="attention well span1"><%= total.called_count %></td>
-  <% ROGv::FortUtil.fort_types_fe.each do |f| %>
-    <td class="span1"><%= total.called[f].to_i %></td>
+  <% case
+  when gvtype_fe? %>
+    <% ROGv::FortUtil.fort_types_fe.each do |f| %>
+      <td class="span1"><%= total.called[f].to_i %></td>
+    <% end %>
+    <td class="well span1"><%= total.called_count_fe %></td>
+    <% ROGv::FortUtil.fort_types_se.each do |f| %>
+      <td class="span1"><%= total.called[f].to_i %></td>
+    <% end %>
+    <td class="well span1"><%= total.called_count_se %></td>
+  <% when gvtype_te? %>
+    <% ROGv::FortUtil.fort_types_te.each do |f| %>
+      <td class="span1"><%= total.called[f].to_i %></td>
+    <% end %>
   <% end %>
-  <td class="well span1"><%= total.called_count_fe %></td>
-  <% ROGv::FortUtil.fort_types_se.each do |f| %>
-    <td class="span1"><%= total.called[f].to_i %></td>
-  <% end %>
-  <td class="well span1"><%= total.called_count_se %></td>
 </tr>
 <tr>
   <td class="span1">Ruled</td>
   <td class="attention well span1"><%= total.ruled_count %></td>
-  <% ROGv::FortUtil.fort_types_fe.each do |f| %>
-    <td class="span1"><%= total.ruled[f].to_i %></td>
+  <% case
+  when gvtype_fe? %>
+    <% ROGv::FortUtil.fort_types_fe.each do |f| %>
+      <td class="span1"><%= total.ruled[f].to_i %></td>
+    <% end %>
+    <td class="well span1"><%= total.ruled_count_fe %></td>
+    <% ROGv::FortUtil.fort_types_se.each do |f| %>
+      <td class="span1"><%= total.ruled[f].to_i %></td>
+    <% end %>
+    <td class="well span1"><%= total.ruled_count_se %></td>
+  <% when gvtype_te? %>
+    <% ROGv::FortUtil.fort_types_te.each do |f| %>
+      <td class="span1"><%= total.ruled[f].to_i %></td>
+    <% end %>
   <% end %>
-  <td class="well span1"><%= total.ruled_count_fe %></td>
-  <% ROGv::FortUtil.fort_types_se.each do |f| %>
-    <td class="span1"><%= total.ruled[f].to_i %></td>
-  <% end %>
-  <td class="well span1"><%= total.ruled_count_se %></td>
 </tr>

@@ -58,7 +58,7 @@ module ROGv
 
       def apply(ps)
         return unless ps
-        return if (ps.forts.nil? || ps.forts.empty?)
+        return unless ps.valid?
 
         ldata = self.latest || self.new
         return if (ldata.revision && ldata.revision >= ps.revision)
@@ -70,7 +70,9 @@ module ROGv
 
         update = false
         ps.forts.each do |udata|
-          f = forts[udata.fort_id]
+          fid = udata.fort_id
+          next unless FortUtil.exist_fort?(fid)
+          f = forts[fid]
           si.forts << if f
             f.changed?(udata) ? udata : f
           else

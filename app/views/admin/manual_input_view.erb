@@ -17,7 +17,17 @@
     <h3>結果手動入力 : <%= devided_date(@result.gv_date) %></h3>
   </div>
 </div>
-<% date = Date.parse(@result.gv_date) %>
+<%
+date = Date.parse(@result.gv_date)
+case
+when gvtype_fe?
+  valid = date.sunday? ? true : false
+  dname = '日曜日'
+when gvtype_te?
+  valid = date.saturday? ? true : false
+  dname = '土曜日'
+end
+%>
 <div class="row">
   <div class="span6">
     <% case
@@ -52,10 +62,10 @@
           </strong>
         </p>
       </div>
-    <% when @result.manual? && @result.new_record? && !date.sunday? %>
+    <% when @result.manual? && @result.new_record? && !valid %>
       <div class="alert">
         <p>
-          <strong><%= devided_date(@result.gv_date) %></strong>は日曜日ではありません<br/>
+          <strong><%= devided_date(@result.gv_date) %></strong>は<%= dname %>ではありません<br/>
           誤って指定した場合は<a href="<%= url_for(:a, :manual_input) %>">戻って選び直してください</a>
         </p>
       </div>

@@ -1,3 +1,7 @@
+body.withnav {
+  padding-top: 60px;
+}
+
 td.guild-owner {
   background-color: #fcc;
 }

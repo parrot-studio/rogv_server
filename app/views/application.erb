@@ -12,11 +12,11 @@
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body<%= ' class="withnav"' unless @nonav %>>
+    <% unless @nonav %>
+      <%= partial :topnav %>
+    <% end %>
     <div class="container">
-      <div class="page-header">
-        <h1>ROGv <small>Forts Watching System (for <%= ROGv::ServerSettings.env.server_name %>)</small></h1>
-      </div>
       <%= yield %>
     </div>
     <hr>

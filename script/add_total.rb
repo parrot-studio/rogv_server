@@ -20,7 +20,7 @@ def add_total(d)
   wr = ROGv::WeeklyResult.for_date(d)
   wr ||= ROGv::WeeklyResult.analyze_for(d)
   raise 'totalize failed' unless wr
-  wr.save! if wr.new_record?
+  wr.save if wr.new_record?
   ROGv::TotalResult.add_result_to_all_total!(d)
   ROGv::FortResult.add_result(d)
 end
