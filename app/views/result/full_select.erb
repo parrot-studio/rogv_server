@@ -32,6 +32,17 @@
       <div class="span4">
         <fieldset>
           <legend>Select Guild or Union</legend>
+          <p>
+            <small>
+              <% if params[:all] %>
+                <u>From : All</u>
+                (<a href="<%= url_for(:r, :full_select) %>">Select from Recently Guilds</a>)
+              <% else %>
+                <u>From : Recently <%= ROGv::ServerSettings.result_recently_size %>weeks</u>
+                (<a href="<%= url_for(:r, :full_select, :all => 1) %>">Select from All Guilds</a>)
+              <% end %>
+            </small>
+          </p>
           <% (1..8).each do |i| %>
             <div class="control-group">
               <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>

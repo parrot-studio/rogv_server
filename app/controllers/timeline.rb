@@ -130,7 +130,7 @@ module ROGv
 
     get :span_union_select, :map => '/t/span' do
       @dlist = timeline_dates
-      @names = guild_names_for_all_total
+      @names = guild_names_for_select(params[:all])
       render 'timeline/span_union'
     end
 

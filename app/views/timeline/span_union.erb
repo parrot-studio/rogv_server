@@ -37,6 +37,19 @@ end
             </select>
             <p><small>max : <%= ROGv::ServerSettings.timeline_max_size %>weeks</small></p>
           </div>
+          <div>
+            <p>
+              <small>
+                <% if params[:all] %>
+                <u>From : All</u>
+                  (<a href="<%= url_for(:t, :span_union_select) %>">Select from Recently Guilds</a>)
+                <% else %>
+                  <u>From : Recently <%= ROGv::ServerSettings.result_recently_size %>weeks</u>
+                  (<a href="<%= url_for(:t, :span_union_select, :all => 1) %>">Select from All Guilds</a>)
+                <% end %>
+              </small>
+            </p>
+          </div>
           <% (1..8).each do |i| %>
             <div class="control-group">
               <label class="control-label" for="guild_<%= i %>">Guild <%= i %></label>

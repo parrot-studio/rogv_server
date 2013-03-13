@@ -3,6 +3,9 @@ ROGv - Forts Watching System : Server
 
 ChangeLog
 ---------------
+#### ver5.1
+- 修正：ギルド選択する各画面で、リストのデフォルトを最近のギルドに修正（切り替え可能）
+
 #### ver5.0
 - 新規：GvTEモードを追加
 - 新規：GvTEモードに関わる設定を追加

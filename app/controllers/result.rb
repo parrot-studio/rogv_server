@@ -7,7 +7,7 @@ module ROGv
     end
 
     get :full_select, :map => '/r/full' do
-      @names = guild_names_for_all_total
+      @names = guild_names_for_select(params[:all])
       render 'result/full_select'
     end
 
@@ -50,7 +50,7 @@ module ROGv
     end
 
     get :recently_select, :map => '/r/recently' do
-      @names = guild_names_for_all_total
+      @names = guild_names_for_select(params[:all])
       render 'result/recently_select'
     end
 
@@ -118,7 +118,7 @@ module ROGv
 
     get :span_select, :map => '/r/span' do
       @dlist = result_dates
-      @names = guild_names_for_all_total
+      @names = guild_names_for_select(params[:all])
       render 'result/span_select'
     end
 
