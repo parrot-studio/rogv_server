@@ -66,7 +66,7 @@ module ROGv
     end
 
     def dump
-      FileUtils.mkdir(dump_path) unless File.exist?(dump_path)
+      FileUtils.mkdir_p(dump_path) unless File.exist?(dump_path)
       FileUtils.rm_r(dump_output_path) if File.exist?(dump_output_path)
       cmd = "mongodump -d #{ServerSettings.db.name} -o #{dump_output_path}"
       if (ServerSettings.db.user && ServerSettings.db.pass)

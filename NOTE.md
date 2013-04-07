@@ -116,6 +116,17 @@ memcachedと違い、mongodbへのキャッシュはいくらでも肥大化す�
 
 - -e ENV/--env=ENV：実行環境指定（デフォルトはdevelopment）
 
+#### exporter.rb
+新システム移行用にデータをテキストでexportする。
+Situation（とそれに含まれるFort）は「dump/export/[日付].txt」の形でexportされる。
+手動で入力した結果は「dump/export/manual.txt」の形でexportされる。
+その他の集計データやキャッシュはexportされない。
+オプションに限らず、手動入力結果データは常に出力される。
+新システム側で読み込みスクリプトを実行する。
+
+- -e ENV/--env=ENV：実行環境指定（デフォルトはdevelopment）
+- -f DATE/--from=DATE：指定日以降をexport（指定がなければ最初から）
+- -t DATE/--to=DATE：指定日以前をexport（指定がなければ最後まで）
 
 バージョン表記について
 ---------------

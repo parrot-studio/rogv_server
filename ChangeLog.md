@@ -3,6 +3,9 @@ ROGv - Forts Watching System : Server
 
 ChangeLog
 ---------------
+#### ver5.2
+- 新規：データのexportスクリプトを追加（新システム移行用）
+
 #### ver5.1
 - 修正：ギルド選択する各画面で、リストのデフォルトを最近のギルドに修正（切り替え可能）
 
