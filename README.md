@@ -1,6 +1,13 @@
 ROGv - Forts Watching System : Server
 ===============
 
+Attention!!
+---------------
+すでに開発は終了しております。
+後継システム「Gagnrath」をご利用ください。
+
+https://github.com/parrot-studio/gagnrath
+
 Description
 ---------------
 ROのGvGにおいて、「現状」を把握するためのシステム「ROGv」のサーバ側です。
@@ -10,10 +17,6 @@ ROのGvGにおいて、「現状」を把握するためのシステム「ROGv�
 - Padrino（ver1.xはSinatra）
 - memcached
 - MongoDB
-
-Sample Site
----------------
-http://parrot-studio.com/rogvs/
 
 EAQ(Expected Asked Questions)
 ---------------
